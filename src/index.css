@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+:root {
+  /* Nossos tokens */
+  --petrol:        #1A6B8A;
+  --petrol-hover:  #2589AC;
+  --petrol-subtle: #E0F2F9;
+  --bg-page:       #F2F7FA;
+  --fg-page:       #0F2533;
+
+  /* Override awake-ui brand */
+  --color-awake-brand:       #1A6B8A;
+  --color-awake-brand-hover: #2589AC;
+}
+
+[data-theme="dark"] {
+  --bg-page: #111827;
+  --fg-page: #F2F7FA;
+
+  --color-awake-brand:       #1A6B8A;
+  --color-awake-brand-hover: #2589AC;
+}
+
+/* Força petrol no botão primário em ambos os temas */
+[data-theme="dark"] .awake-button--primary {
+  background: var(--petrol);
+  border-color: var(--petrol);
+}
+
+[data-theme="dark"] .awake-button--primary:hover {
+  background: var(--petrol-hover);
+  border-color: var(--petrol-hover);
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--fg-page);
+}

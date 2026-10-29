@@ -1,0 +1,74 @@
+@reference "tailwindcss";
+
+.login-page {
+  @apply min-h-screen flex flex-col items-center justify-center px-5 py-16 gap-8;
+}
+
+.login-hero {
+  @apply flex flex-col items-center gap-4 text-center;
+}
+
+.app-icon {
+  @apply w-20 h-20 rounded-[22px] flex items-center justify-center;
+  background: var(--petrol);
+  box-shadow: 0 8px 28px color-mix(in srgb, var(--petrol) 40%, transparent);
+}
+
+.app-name {
+  @apply text-3xl font-extrabold tracking-tight;
+  color: var(--color-awake-text);
+}
+
+.app-tagline {
+  @apply text-sm mt-1 max-w-[240px] mx-auto;
+  color: var(--color-awake-text-muted);
+}
+
+.login-card {
+  @apply w-full max-w-sm flex flex-col gap-5 rounded-2xl p-6;
+  background: var(--color-awake-surface);
+  border: 1px solid var(--color-awake-border);
+  box-shadow: 0 4px 16px rgba(15, 37, 51, 0.1);
+}
+
+.btn-google {
+  @apply w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl
+         text-sm font-medium cursor-pointer transition-colors disabled:opacity-50;
+  background: transparent;
+  border: 1.5px solid var(--color-awake-border);
+  color: var(--color-awake-text);
+}
+
+.btn-google:hover:not(:disabled) {
+  border-color: var(--color-awake-brand);
+}
+
+.login-divider {
+  @apply flex items-center gap-3 text-xs;
+  color: var(--color-awake-text-subtle);
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  @apply flex-1 h-px;
+  background: var(--color-awake-border);
+}
+
+.login-link {
+  @apply text-xs cursor-pointer bg-transparent border-none p-0 transition-colors;
+  color: var(--color-awake-text-subtle);
+}
+
+.login-link:hover {
+  color: var(--color-awake-brand);
+}
+
+.login-footer {
+  @apply text-xs text-center max-w-[280px];
+  color: var(--color-awake-text-subtle);
+}
+
+.login-footer a {
+  color: var(--petrol);
+}
