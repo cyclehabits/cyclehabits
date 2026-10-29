@@ -31,18 +31,6 @@
   box-shadow: 0 4px 16px rgba(15, 37, 51, 0.1);
 }
 
-.btn-google {
-  @apply w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl
-         text-sm font-medium cursor-pointer transition-colors disabled:opacity-50;
-  background: transparent;
-  border: 1.5px solid var(--color-awake-border);
-  color: var(--color-awake-text);
-}
-
-.btn-google:hover:not(:disabled) {
-  border-color: var(--color-awake-brand);
-}
-
 .login-divider {
   @apply flex items-center gap-3 text-xs;
   color: var(--color-awake-text-subtle);

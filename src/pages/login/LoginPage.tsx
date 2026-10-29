@@ -207,15 +207,17 @@ export default function LoginPage() {
 
         <div className="login-divider">ou continue com</div>
 
-        <button
+        <Button
           type="button"
-          className="btn-google"
+          variant="outline"
+          size="lg"
           onClick={handleGoogle}
           disabled={loading}
+          style={{ width: '100%', gap: '0.75rem' }}
         >
           <GoogleIcon />
           Continuar com Google
-        </button>
+        </Button>
       </div>
 
       <p className="login-footer">
