@@ -1,0 +1,26 @@
+@reference "tailwindcss";
+
+.streak-card {
+  @apply flex items-center gap-3 rounded-2xl px-4 py-3;
+  background: var(--color-awake-surface);
+  border: 1px solid var(--color-awake-border);
+}
+
+.streak-card__icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.streak-card__body {
+  @apply flex items-baseline gap-2;
+}
+
+.streak-card__count {
+  @apply text-3xl font-bold;
+  color: var(--petrol);
+}
+
+.streak-card__label {
+  @apply text-sm font-medium;
+  color: var(--color-awake-text-muted);
+}

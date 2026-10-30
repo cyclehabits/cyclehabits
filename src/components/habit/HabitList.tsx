@@ -1,24 +1,35 @@
+import { Loading } from '@awakr/awake-ui/loading'
 import type { Habit, HabitLog, HabitStatus } from '@/types/habit'
 import { HabitItem } from '@/components/habit/HabitItem'
+import '@/components/habit/HabitList.css'
 
 interface HabitListProps {
   habits: Habit[]
   logs: Record<string, HabitLog>
   onUpdate: (habitId: string, status: HabitStatus) => void
   emptyMessage?: string
+  loading?: boolean
 }
 
-export function HabitList({ habits, logs, onUpdate, emptyMessage = 'Nenhum hábito para hoje.' }: HabitListProps) {
+export function HabitList({ habits, logs, onUpdate, emptyMessage = '', loading }: HabitListProps) {
+  if (loading) {
+    return (
+      <div className="habit-list__loading">
+        <Loading size="md" />
+      </div>
+    )
+  }
+
   if (habits.length === 0) {
     return (
-      <p style={{ textAlign: 'center', color: 'var(--color-awake-text-muted)', fontSize: '0.875rem', padding: '2rem 0' }}>
+      <p className="habit-list__empty">
         {emptyMessage}
       </p>
     )
   }
 
   return (
-    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+    <ul className="habit-list">
       {habits.map((habit) => (
         <HabitItem
           key={habit.id}

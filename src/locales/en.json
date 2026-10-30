@@ -1,0 +1,135 @@
+{
+  "nav": {
+    "today": "Today",
+    "history": "History",
+    "habits": "Habits",
+    "stats": "Stats",
+    "profile": "Profile"
+  },
+  "today": {
+    "greeting": "Hello, {{name}} 👋",
+    "noHabits": "No habits scheduled for this day.",
+    "loading": "Loading…",
+    "progress": "Daily progress",
+    "congrats": "🎉 All habits completed!"
+  },
+  "habits": {
+    "title": "Habits",
+    "add": "New habit",
+    "empty": "No habits yet.",
+    "archive": "Archive",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Ex: Drink water",
+      "description": "Description (optional)",
+      "descriptionPlaceholder": "Ex: 2 liters per day",
+      "frequency": "Frequency",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "days": "Days",
+      "day": "Day of month",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
+  },
+  "history": {
+    "title": "History",
+    "streak": "consecutive day",
+    "streak_plural": "consecutive days",
+    "done": "Done",
+    "ignored": "Ignored",
+    "pending": "Pending",
+    "noHabits": "No active habits on this day.",
+    "legend": {
+      "full": "All done",
+      "partial": "Partial",
+      "low": "Few"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "logout": "Sign out"
+  },
+  "login": {
+    "title": "CycleHabits",
+    "subtitle": "Build habits that last.",
+    "tab_signin": "Sign in",
+    "tab_signup": "Sign up",
+    "email": "Email",
+    "password": "Password",
+    "password_placeholder": "Min. 8 characters",
+    "forgot": "Forgot password",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "signin_btn": "Sign in",
+    "signin_loading": "Signing in…",
+    "signup_btn": "Create account",
+    "signup_loading": "Creating account…",
+    "google": "Continue with Google",
+    "or": "or continue with",
+    "terms": "By continuing, you agree to the",
+    "terms_link": "Terms of Use",
+    "privacy_link": "Privacy Policy",
+    "terms_and": "and",
+    "error_invalid": "Invalid email or password.",
+    "error_signup": "Could not create account. Please try again.",
+    "error_google": "Failed to sign in with Google.",
+    "error_forgot": "Enter your email to reset your password.",
+    "error_forgot_sent": "Password reset email sent."
+  },
+  "months": {
+    "short": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
+    "long": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ]
+  },
+  "weekdays": {
+    "short": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "long": [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ]
+  }
+}

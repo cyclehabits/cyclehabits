@@ -1,0 +1,135 @@
+{
+  "nav": {
+    "today": "Hoje",
+    "history": "Histórico",
+    "habits": "Hábitos",
+    "stats": "Stats",
+    "profile": "Perfil"
+  },
+  "today": {
+    "greeting": "Olá, {{name}} 👋",
+    "noHabits": "Nenhum hábito agendado para este dia.",
+    "loading": "Carregando…",
+    "progress": "Progresso do dia",
+    "congrats": "🎉 Todos os hábitos concluídos!"
+  },
+  "habits": {
+    "title": "Hábitos",
+    "add": "Novo hábito",
+    "empty": "Nenhum hábito cadastrado.",
+    "archive": "Arquivar",
+    "form": {
+      "name": "Nome",
+      "namePlaceholder": "Ex: Beber água",
+      "description": "Descrição (opcional)",
+      "descriptionPlaceholder": "Ex: 2 litros por dia",
+      "frequency": "Frequência",
+      "daily": "Diário",
+      "weekly": "Semanal",
+      "monthly": "Mensal",
+      "days": "Dias",
+      "day": "Dia do mês",
+      "save": "Salvar",
+      "cancel": "Cancelar"
+    }
+  },
+  "history": {
+    "title": "Histórico",
+    "streak": "dia consecutivo",
+    "streak_plural": "dias consecutivos",
+    "done": "Feito",
+    "ignored": "Ignorado",
+    "pending": "Pendente",
+    "noHabits": "Nenhum hábito ativo neste dia.",
+    "legend": {
+      "full": "Tudo feito",
+      "partial": "Parcial",
+      "low": "Poucos"
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "language": "Idioma",
+    "theme": "Tema",
+    "dark": "Escuro",
+    "light": "Claro",
+    "logout": "Sair"
+  },
+  "login": {
+    "title": "CycleHabits",
+    "subtitle": "Construa hábitos que duram.",
+    "tab_signin": "Entrar",
+    "tab_signup": "Cadastrar",
+    "email": "E-mail",
+    "password": "Senha",
+    "password_placeholder": "Mín. 8 caracteres",
+    "forgot": "Esqueci a senha",
+    "first_name": "Nome",
+    "last_name": "Sobrenome",
+    "signin_btn": "Entrar",
+    "signin_loading": "Entrando…",
+    "signup_btn": "Criar conta",
+    "signup_loading": "Criando conta…",
+    "google": "Continuar com Google",
+    "or": "ou continue com",
+    "terms": "Ao continuar, você concorda com os",
+    "terms_link": "Termos de Uso",
+    "privacy_link": "Política de Privacidade",
+    "terms_and": "e a",
+    "error_invalid": "E-mail ou senha inválidos.",
+    "error_signup": "Não foi possível criar a conta. Tente novamente.",
+    "error_google": "Falha ao entrar com Google.",
+    "error_forgot": "Digite seu e-mail para redefinir a senha.",
+    "error_forgot_sent": "E-mail de redefinição enviado."
+  },
+  "months": {
+    "short": [
+      "jan",
+      "fev",
+      "mar",
+      "abr",
+      "mai",
+      "jun",
+      "jul",
+      "ago",
+      "set",
+      "out",
+      "nov",
+      "dez"
+    ],
+    "long": [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro"
+    ]
+  },
+  "weekdays": {
+    "short": [
+      "Dom",
+      "Seg",
+      "Ter",
+      "Qua",
+      "Qui",
+      "Sex",
+      "Sáb"
+    ],
+    "long": [
+      "Domingo",
+      "Segunda",
+      "Terça",
+      "Quarta",
+      "Quinta",
+      "Sexta",
+      "Sábado"
+    ]
+  }
+}

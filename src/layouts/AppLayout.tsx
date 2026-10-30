@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useTheme } from '@/contexts/theme/useTheme'
 import { Button } from '@awakr/awake-ui/button'
 import { BottomNav } from '@/components/nav/BottomNav'
 import { Outlet } from 'react-router-dom'
@@ -41,21 +40,9 @@ function InstallButton() {
   )
 }
 
-function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme()
-  return (
-    <div style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 50 }}>
-      <Button variant="ghost" size="sm" onClick={toggleTheme} aria-label="Alternar tema">
-        {theme === 'dark' ? '☀️' : '🌙'}
-      </Button>
-    </div>
-  )
-}
-
 export default function AppLayout() {
   return (
     <>
-      <ThemeToggle />
       <InstallButton />
       <Outlet />
       <BottomNav />

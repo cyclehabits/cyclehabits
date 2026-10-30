@@ -1,0 +1,63 @@
+@reference "tailwindcss";
+
+.day-detail {
+  @apply rounded-2xl p-4 flex flex-col gap-3;
+  background: var(--color-awake-surface);
+  border: 1px solid var(--color-awake-border);
+}
+
+.day-detail__header {
+  @apply flex items-center justify-between;
+}
+
+.day-detail__date {
+  @apply text-base font-semibold;
+  color: var(--color-awake-text);
+}
+
+.day-detail__summary {
+  @apply text-sm font-medium;
+  color: var(--petrol);
+}
+
+.day-detail__empty {
+  @apply text-sm text-center py-4;
+  color: var(--color-awake-text-muted);
+}
+
+.day-detail__list {
+  @apply flex flex-col gap-2;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.day-detail__item {
+  @apply flex items-center gap-3 px-3 py-2 rounded-xl;
+  background: color-mix(in srgb, var(--color-awake-border) 40%, transparent);
+}
+
+.day-detail__status-dot {
+  @apply block rounded-full flex-shrink-0;
+  width: 8px;
+  height: 8px;
+}
+
+.day-detail__item--done .day-detail__status-dot    { background: var(--petrol); }
+.day-detail__item--ignored .day-detail__status-dot { background: var(--color-awake-text-muted); }
+.day-detail__item--pending .day-detail__status-dot { background: var(--color-awake-border); }
+
+.day-detail__name {
+  @apply flex-1 text-sm font-medium;
+  color: var(--color-awake-text);
+}
+
+.day-detail__item--ignored .day-detail__name {
+  text-decoration: line-through;
+  color: var(--color-awake-text-muted);
+}
+
+.day-detail__status-label {
+  @apply text-xs font-medium;
+  color: var(--color-awake-text-muted);
+}

@@ -1,0 +1,99 @@
+@reference "tailwindcss";
+
+.calendar-card {
+  @apply rounded-2xl p-4 flex flex-col gap-4;
+  background: var(--color-awake-surface);
+  border: 1px solid var(--color-awake-border);
+}
+
+.calendar-nav {
+  @apply flex items-center justify-between;
+}
+
+.calendar-nav__label {
+  @apply text-base font-semibold;
+  color: var(--color-awake-text);
+}
+
+.calendar-nav__btn {
+  @apply w-8 h-8 rounded-lg flex items-center justify-center text-xl border-none cursor-pointer transition-colors;
+  background: transparent;
+  color: var(--color-awake-text);
+}
+
+.calendar-nav__btn:hover:not(:disabled) {
+  background: var(--color-awake-border);
+}
+
+.calendar-nav__btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.calendar-grid {
+  @apply grid gap-1;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-grid__label {
+  @apply text-center text-[10px] font-semibold uppercase pb-1;
+  color: var(--color-awake-text-muted);
+}
+
+.calendar-day {
+  @apply flex flex-col items-center gap-[2px] py-1 rounded-lg border-none cursor-pointer transition-colors;
+  min-height: 40px;
+  justify-content: center;
+  background: transparent;
+  width: 100%;
+}
+
+.calendar-day:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--petrol) 8%, transparent);
+}
+
+.calendar-day--today .calendar-day__num {
+  color: var(--petrol);
+  font-weight: 700;
+}
+
+.calendar-day--selected {
+  background: color-mix(in srgb, var(--petrol) 15%, transparent) !important;
+  outline: 2px solid var(--petrol);
+  outline-offset: -2px;
+}
+
+.calendar-day--future {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.calendar-day__num {
+  @apply text-sm;
+  color: var(--color-awake-text);
+}
+
+.calendar-day__dot {
+  @apply block rounded-full;
+  width: 6px;
+  height: 6px;
+}
+
+.day--full    { background: var(--petrol); }
+.day--partial { background: color-mix(in srgb, var(--petrol) 55%, transparent); }
+.day--low     { background: color-mix(in srgb, var(--petrol) 25%, transparent); }
+
+.calendar-legend {
+  @apply flex items-center justify-center gap-4;
+}
+
+.legend-item {
+  @apply flex items-center gap-1 text-[10px] font-medium;
+  color: var(--color-awake-text-muted);
+}
+
+.legend-dot {
+  @apply block rounded-full;
+  width: 8px;
+  height: 8px;
+}

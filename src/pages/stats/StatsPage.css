@@ -1,0 +1,76 @@
+@reference "tailwindcss";
+
+.stats-page {
+  min-height: 100svh;
+  background: var(--bg-page);
+}
+
+.stats-page__inner {
+  @apply max-w-lg mx-auto px-4 pb-24 flex flex-col gap-4;
+  padding-top: max(4.5rem, env(safe-area-inset-top, 0px) + 4rem);
+}
+
+.stats-title {
+  @apply text-2xl font-bold mb-0;
+  color: var(--color-awake-text);
+}
+
+.stats-subtitle {
+  @apply text-sm -mt-2;
+  color: var(--color-awake-text-muted);
+}
+
+.stats-loading {
+  @apply flex justify-center py-12;
+}
+
+.stats-overall {
+  @apply flex flex-col items-center justify-center py-6 rounded-2xl gap-1;
+  background: var(--color-awake-surface);
+}
+
+.stats-overall__pct {
+  @apply text-5xl font-bold;
+  color: var(--color-awake-primary);
+}
+
+.stats-overall__label {
+  @apply text-sm;
+  color: var(--color-awake-text-muted);
+}
+
+.stats-list {
+  @apply flex flex-col gap-3;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stats-item {
+  @apply flex flex-col gap-1 p-4 rounded-xl;
+  background: var(--color-awake-surface);
+}
+
+.stats-item__header {
+  @apply flex justify-between items-center;
+}
+
+.stats-item__name {
+  @apply text-sm font-medium;
+  color: var(--color-awake-text);
+}
+
+.stats-item__count {
+  @apply text-xs;
+  color: var(--color-awake-text-muted);
+}
+
+.stats-item__bar-track {
+  @apply w-full h-1.5 rounded-full overflow-hidden;
+  background: var(--color-awake-border, rgba(0,0,0,0.1));
+}
+
+.stats-item__bar-fill {
+  @apply h-full rounded-full transition-all;
+  background: var(--color-awake-primary);
+}

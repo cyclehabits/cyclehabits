@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -27,6 +28,7 @@ function GoogleIcon() {
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -45,7 +47,7 @@ export default function LoginPage() {
       await signInWithEmailAndPassword(auth, email, password)
       navigate('/today')
     } catch {
-      setError('E-mail ou senha inválidos.')
+      setError(t('login.error_invalid'))
     } finally {
       setLoading(false)
     }
@@ -59,49 +61,36 @@ export default function LoginPage() {
       await createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword)
       navigate('/today')
     } catch {
-      setError('Não foi possível criar a conta. Tente novamente.')
+      setError(t('login.error_signup'))
     } finally {
       setLoading(false)
     }
   }
 
-  // async function handleGoogle() {
-  //   setError('')
-  //   setLoading(true)
-  //   try {
-  //     await signInWithPopup(auth, new GoogleAuthProvider())
-  //     navigate('/today')
-  //   } catch {
-  //     setError('Falha ao entrar com Google.')
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
-
   async function handleGoogle() {
-  setError('')
-  setLoading(true)
-  try {
-    await signInWithPopup(auth, new GoogleAuthProvider())
-    navigate('/today')
-  } catch (err) {
-    console.error('Google auth error:', err)  // ← adicione isso
-    setError('Falha ao entrar com Google.')
-  } finally {
-    setLoading(false)
+    setError('')
+    setLoading(true)
+    try {
+      await signInWithPopup(auth, new GoogleAuthProvider())
+      navigate('/today')
+    } catch (err) {
+      console.error('Google auth error:', err)
+      setError(t('login.error_google'))
+    } finally {
+      setLoading(false)
+    }
   }
-}
 
   async function handleForgotPassword() {
     if (!email) {
-      setError('Digite seu e-mail para redefinir a senha.')
+      setError(t('login.error_forgot'))
       return
     }
     try {
       await sendPasswordResetEmail(auth, email)
       setError('')
     } catch {
-      setError('Não foi possível enviar o e-mail de redefinição.')
+      setError(t('login.error_forgot'))
     }
   }
 
@@ -115,28 +104,28 @@ export default function LoginPage() {
           </svg>
         </div>
         <div>
-          <p className="app-name">CycleHabits</p>
-          <p className="app-tagline">Construa sua rotina, um dia de cada vez.</p>
+          <p className="app-name">{t('login.title')}</p>
+          <p className="app-tagline">{t('login.subtitle')}</p>
         </div>
       </div>
 
       <div className="login-card">
         {error && <Alert variant="error">{error}</Alert>}
 
-        <Tabs.Root defaultValue="entrar" onValueChange={() => setError('')}>
+        <Tabs.Root defaultValue="signin" onValueChange={() => setError('')}>
           <Tabs.List>
-            <Tabs.Tab value="entrar">Entrar</Tabs.Tab>
-            <Tabs.Tab value="cadastrar">Cadastrar</Tabs.Tab>
+            <Tabs.Tab value="signin">{t('login.tab_signin')}</Tabs.Tab>
+            <Tabs.Tab value="signup">{t('login.tab_signup')}</Tabs.Tab>
             <Tabs.Indicator />
           </Tabs.List>
 
-          <Tabs.Panel value="entrar">
+          <Tabs.Panel value="signin">
             <form onSubmit={handleSignIn} className="flex flex-col gap-4 pt-4">
               <Field.Root>
-                <Field.Label>E-mail</Field.Label>
+                <Field.Label>{t('login.email')}</Field.Label>
                 <Field.Control
                   type="email"
-                  placeholder="voce@email.com"
+                  placeholder="you@email.com"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
@@ -145,9 +134,9 @@ export default function LoginPage() {
 
               <Field.Root>
                 <div className="flex justify-between items-center mb-1">
-                  <Field.Label>Senha</Field.Label>
+                  <Field.Label>{t('login.password')}</Field.Label>
                   <button type="button" className="login-link" onClick={handleForgotPassword}>
-                    Esqueci a senha
+                    {t('login.forgot')}
                   </button>
                 </div>
                 <Field.Control
@@ -160,16 +149,16 @@ export default function LoginPage() {
               </Field.Root>
 
               <Button type="submit" variant="primary" size="lg" disabled={loading}>
-                {loading ? 'Entrando…' : 'Entrar'}
+                {loading ? t('login.signin_loading') : t('login.signin_btn')}
               </Button>
             </form>
           </Tabs.Panel>
 
-          <Tabs.Panel value="cadastrar">
+          <Tabs.Panel value="signup">
             <form onSubmit={handleSignUp} className="flex flex-col gap-4 pt-4">
               <div className="flex gap-3">
                 <Field.Root className="flex-1">
-                  <Field.Label>Nome</Field.Label>
+                  <Field.Label>{t('login.first_name')}</Field.Label>
                   <Field.Control
                     type="text"
                     placeholder="Ana"
@@ -179,7 +168,7 @@ export default function LoginPage() {
                   />
                 </Field.Root>
                 <Field.Root className="flex-1">
-                  <Field.Label>Sobrenome</Field.Label>
+                  <Field.Label>{t('login.last_name')}</Field.Label>
                   <Field.Control
                     type="text"
                     placeholder="Silva"
@@ -190,10 +179,10 @@ export default function LoginPage() {
               </div>
 
               <Field.Root>
-                <Field.Label>E-mail</Field.Label>
+                <Field.Label>{t('login.email')}</Field.Label>
                 <Field.Control
                   type="email"
-                  placeholder="voce@email.com"
+                  placeholder="you@email.com"
                   value={signUpEmail}
                   onChange={e => setSignUpEmail(e.target.value)}
                   required
@@ -201,10 +190,10 @@ export default function LoginPage() {
               </Field.Root>
 
               <Field.Root>
-                <Field.Label>Senha</Field.Label>
+                <Field.Label>{t('login.password')}</Field.Label>
                 <Field.Control
                   type="password"
-                  placeholder="Mín. 8 caracteres"
+                  placeholder={t('login.password_placeholder')}
                   value={signUpPassword}
                   onChange={e => setSignUpPassword(e.target.value)}
                   required
@@ -213,13 +202,13 @@ export default function LoginPage() {
               </Field.Root>
 
               <Button type="submit" variant="primary" size="lg" disabled={loading}>
-                {loading ? 'Criando conta…' : 'Criar conta'}
+                {loading ? t('login.signup_loading') : t('login.signup_btn')}
               </Button>
             </form>
           </Tabs.Panel>
         </Tabs.Root>
 
-        <div className="login-divider">ou continue com</div>
+        <div className="login-divider">{t('login.or')}</div>
 
         <Button
           type="button"
@@ -230,14 +219,14 @@ export default function LoginPage() {
           style={{ width: '100%', gap: '0.75rem' }}
         >
           <GoogleIcon />
-          Continuar com Google
+          {t('login.google')}
         </Button>
       </div>
 
       <p className="login-footer">
-        Ao continuar, você concorda com os{' '}
-        <a href="#">Termos de Uso</a> e a{' '}
-        <a href="#">Política de Privacidade</a>.
+        {t('login.terms')}{' '}
+        <a href="#">{t('login.terms_link')}</a> {t('login.terms_and')}{' '}
+        <a href="#">{t('login.privacy_link')}</a>.
       </p>
     </div>
   )

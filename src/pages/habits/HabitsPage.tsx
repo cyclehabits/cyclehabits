@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@awakr/awake-ui/button'
 import { useHabits } from '@/hooks/useHabits'
 import { useCreateHabit } from '@/hooks/useCreateHabit'
@@ -8,29 +9,30 @@ import type { Frequency } from '@/types/habit'
 import './HabitsPage.css'
 
 export default function HabitsPage() {
+  const { t } = useTranslation()
   const { habits, loading } = useHabits()
   const { mutate: createHabit, isPending: creating } = useCreateHabit()
   const { mutate: archiveHabit } = useArchiveHabit()
   const [showForm, setShowForm] = useState(false)
 
-  function handleCreate(data: { name: string; description?: string; frequency: Frequency }) {
-    createHabit(data, { onSuccess: () => setShowForm(false) })
+  const FREQ_LABEL: Record<string, string> = {
+    daily: t('habits.form.daily'),
+    weekly: t('habits.form.weekly'),
+    monthly: t('habits.form.monthly'),
   }
 
-  const FREQ_LABEL: Record<string, string> = {
-    daily: 'Diário',
-    weekly: 'Semanal',
-    monthly: 'Mensal',
+  function handleCreate(data: { name: string; description?: string; frequency: Frequency }) {
+    createHabit(data, { onSuccess: () => setShowForm(false) })
   }
 
   return (
     <div className="habits-page">
       <div className="habits-page__inner">
         <div className="habits-page__header">
-          <h1 className="habits-page__title">Hábitos</h1>
+          <h1 className="habits-page__title">{t('habits.title')}</h1>
           {!showForm && (
             <Button variant="primary" size="sm" onClick={() => setShowForm(true)}>
-              + Novo
+              + {t('habits.add')}
             </Button>
           )}
         </div>
@@ -46,9 +48,9 @@ export default function HabitsPage() {
         )}
 
         {loading ? (
-          <p className="habits-page__empty">Carregando…</p>
+          <p className="habits-page__empty">{t('today.loading')}</p>
         ) : habits.length === 0 && !showForm ? (
-          <p className="habits-page__empty">Nenhum hábito criado ainda.</p>
+          <p className="habits-page__empty">{t('habits.empty')}</p>
         ) : (
           <ul className="habits-page__list">
             {habits.map(habit => (
@@ -64,7 +66,7 @@ export default function HabitsPage() {
                 <button
                   className="habits-page__item-archive"
                   onClick={() => archiveHabit(habit.id)}
-                  aria-label="Arquivar hábito"
+                  aria-label={t('habits.archive')}
                 >
                   🗄
                 </button>

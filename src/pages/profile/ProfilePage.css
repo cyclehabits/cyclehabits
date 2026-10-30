@@ -1,0 +1,70 @@
+@reference "tailwindcss";
+
+.profile-page {
+  min-height: 100svh;
+  background: var(--bg-page);
+}
+
+.profile-page__inner {
+  @apply max-w-lg mx-auto px-4 pb-24 flex flex-col gap-6;
+  padding-top: max(4.5rem, env(safe-area-inset-top, 0px) + 4rem);
+}
+
+.profile-title {
+  @apply text-2xl font-bold;
+  color: var(--color-awake-text);
+}
+
+.profile-section {
+  @apply flex flex-col gap-3;
+}
+
+.profile-section--user {
+  @apply flex-row items-center gap-4;
+}
+
+.profile-section--logout {
+  @apply mt-4;
+}
+
+.profile-section__label {
+  @apply text-sm font-semibold uppercase tracking-wider;
+  color: var(--color-awake-text-muted);
+}
+
+.profile-avatar {
+  @apply w-14 h-14 rounded-full object-cover flex-shrink-0;
+}
+
+.profile-name {
+  @apply font-semibold text-base;
+  color: var(--color-awake-text);
+}
+
+.profile-email {
+  @apply text-sm;
+  color: var(--color-awake-text-muted);
+}
+
+.profile-lang-group {
+  @apply flex gap-2;
+}
+
+.profile-lang-btn {
+  @apply flex-1 py-2 rounded-lg text-sm font-medium transition-colors;
+  background: var(--color-awake-surface);
+  color: var(--color-awake-text-muted);
+  border: 1.5px solid transparent;
+}
+
+.profile-lang-btn--active {
+  color: var(--color-awake-primary);
+  border-color: var(--color-awake-primary);
+}
+
+.profile-theme-btn {
+  @apply w-full py-3 rounded-lg text-sm font-medium text-left px-4 transition-colors;
+  background: var(--color-awake-surface);
+  color: var(--color-awake-text);
+  border: 1.5px solid var(--color-awake-border, transparent);
+}

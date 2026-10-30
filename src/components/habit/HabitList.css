@@ -1,0 +1,17 @@
+@reference "tailwindcss";
+
+.habit-list {
+  @apply flex flex-col gap-2;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.habit-list__empty {
+  @apply text-sm text-center py-8;
+  color: var(--color-awake-text-muted);
+}
+
+.habit-list__loading {
+  @apply flex justify-center py-8;
+}
