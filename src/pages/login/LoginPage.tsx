@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import i18n from '@/i18n'
+import { useTheme } from '@/contexts/theme/useTheme'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
@@ -15,6 +17,12 @@ import { Alert } from '@awakr/awake-ui/alert'
 import { auth } from '@/lib/firebase/auth'
 import './LoginPage.css'
 
+const LANGUAGES = [
+  { code: 'pt', label: 'PT' },
+  { code: 'en', label: 'EN' },
+  { code: 'es', label: 'ES' },
+]
+
 function GoogleIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
@@ -29,6 +37,7 @@ function GoogleIcon() {
 export default function LoginPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { theme, toggleTheme } = useTheme()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -96,6 +105,22 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
+      <div className="login-topbar">
+        <div className="login-lang-group">
+          {LANGUAGES.map(lang => (
+            <button
+              key={lang.code}
+              className={`login-lang-btn${i18n.language === lang.code ? ' login-lang-btn--active' : ''}`}
+              onClick={() => i18n.changeLanguage(lang.code)}
+            >
+              {lang.label}
+            </button>
+          ))}
+        </div>
+        <button className="login-theme-btn" onClick={toggleTheme} aria-label="Toggle theme">
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+      </div>
       <div className="login-hero">
         <div className="app-icon" aria-hidden="true">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
