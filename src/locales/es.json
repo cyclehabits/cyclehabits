@@ -39,7 +39,12 @@
       "durationNone": "Sin duración",
       "durationMin": "min"
     },
-    "edit": "Editar hábito"
+    "edit": "Editar hábito",
+    "editScope": {
+      "title": "¿Qué deseas editar?",
+      "thisDay": "Solo este día",
+      "allEvents": "Todos los eventos"
+    }
   },
   "history": {
     "title": "Historial",

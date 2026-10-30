@@ -6,7 +6,9 @@ import { DailyProgress } from '@/components/progress/DailyProgress'
 import { PageHeader } from './components/PageHeader'
 import { useHabits } from '@/hooks/useHabits'
 import { useHabitsLog } from '@/hooks/useHabitsLog'
+import { useHabitOverrides } from '@/hooks/useHabitOverrides'
 import { isHabitScheduledForDate, formatDate } from '@/utils/habit'
+import type { HabitOverride } from '@/types/habit'
 import './TodayPage.css'
 import { useLocation } from 'react-router-dom'
 
@@ -21,10 +23,16 @@ export default function TodayPage() {
 
   const { habits, loading } = useHabits()
   const { logs, updateLog } = useHabitsLog(dateStr)
+  const { data: overridesList = [] } = useHabitOverrides(dateStr)
 
   const todayHabits = useMemo(
     () => habits.filter((h) => isHabitScheduledForDate(h, selectedDate)),
     [habits, selectedDate],
+  )
+
+  const overridesMap = useMemo(
+    () => Object.fromEntries(overridesList.map((o: HabitOverride) => [o.habitId, o])),
+    [overridesList],
   )
 
   const doneCount = todayHabits.filter((h) => logs[h.id]?.status === 'done').length
@@ -46,6 +54,8 @@ export default function TodayPage() {
           <HabitList
             habits={todayHabits}
             logs={logs}
+            overrides={overridesMap}
+            date={dateStr}
             onUpdate={(habitId, status) => updateLog({ habitId, status })}
             emptyMessage={t('today.noHabits')}
           />

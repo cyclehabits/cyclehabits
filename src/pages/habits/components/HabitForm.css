@@ -50,3 +50,15 @@
 .habit-form__actions {
   @apply flex gap-3 justify-end pt-2;
 }
+.habit-form__every {
+  @apply flex items-center gap-2;
+}
+
+.habit-form__every input {
+  @apply w-20;
+}
+
+.habit-form__every-label {
+  @apply text-sm;
+  color: var(--color-awake-text-muted);
+}

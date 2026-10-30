@@ -39,7 +39,12 @@
       "durationNone": "No duration",
       "durationMin": "min"
     },
-    "edit": "Edit habit"
+    "edit": "Edit habit",
+    "editScope": {
+      "title": "What would you like to edit?",
+      "thisDay": "Only this day",
+      "allEvents": "All events"
+    }
   },
   "history": {
     "title": "History",
