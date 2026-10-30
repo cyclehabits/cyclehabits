@@ -1,0 +1,65 @@
+@reference "tailwindcss";
+
+.habits-page {
+  @apply min-h-screen;
+  background: var(--bg-page);
+}
+
+.habits-page__inner {
+  @apply max-w-lg mx-auto px-4 pb-24 flex flex-col gap-5;
+  padding-top: max(4.5rem, env(safe-area-inset-top, 0px) + 4rem);
+}
+
+.habits-page__header {
+  @apply flex justify-between items-center;
+}
+
+.habits-page__title {
+  @apply text-2xl font-extrabold tracking-tight;
+  color: var(--color-awake-text);
+}
+
+.habits-page__form-card {
+  @apply rounded-2xl p-5;
+  background: var(--color-awake-surface);
+  border: 1px solid var(--color-awake-border);
+}
+
+.habits-page__empty {
+  @apply text-sm text-center py-8;
+  color: var(--color-awake-text-muted);
+}
+
+.habits-page__list {
+  @apply list-none p-0 m-0 flex flex-col gap-3;
+}
+
+.habits-page__item {
+  @apply flex items-center justify-between gap-3 px-4 py-3 rounded-xl;
+  background: var(--color-awake-surface);
+  border: 1px solid var(--color-awake-border);
+}
+
+.habits-page__item-info {
+  @apply flex flex-col gap-0.5 min-w-0;
+}
+
+.habits-page__item-name {
+  @apply text-sm font-medium truncate;
+  color: var(--color-awake-text);
+}
+
+.habits-page__item-freq {
+  @apply text-xs;
+  color: var(--color-awake-text-muted);
+}
+
+.habits-page__item-archive {
+  @apply flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg border-none cursor-pointer transition-colors text-base;
+  background: transparent;
+  color: var(--color-awake-text-muted);
+}
+
+.habits-page__item-archive:hover {
+  background: var(--color-awake-surface-hover, rgba(26,107,138,0.08));
+}

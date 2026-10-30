@@ -1,7 +1,3 @@
 export default function HistoryPage() {
-  return (
-    <div>
-      <h1>History</h1>
-    </div>
-  )
+  return <div style={{ padding: '5rem 1rem', textAlign: 'center', color: 'var(--color-awake-text-muted)' }}>Histórico — em breve</div>
 }

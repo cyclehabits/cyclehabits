@@ -10,18 +10,18 @@ import PrivateRoute from './PrivateRoute'
 export default function Router() {
   return (
     <BrowserRouter>
-      <AppLayout>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route element={<PrivateRoute />}>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route element={<PrivateRoute />}>
+          <Route element={<AppLayout />}>
             <Route path="/" element={<Navigate to="/today" replace />} />
             <Route path="/today" element={<TodayPage />} />
             <Route path="/habits" element={<HabitsPage />} />
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
-        </Routes>
-      </AppLayout>
+        </Route>
+      </Routes>
     </BrowserRouter>
   )
 }

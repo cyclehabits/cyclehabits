@@ -1,0 +1,52 @@
+@reference "tailwindcss";
+
+.habit-form {
+  @apply flex flex-col gap-4;
+}
+
+.habit-form__field {
+  @apply flex flex-col gap-2;
+}
+
+.habit-form__label {
+  @apply text-sm font-medium;
+  color: var(--color-awake-text);
+}
+
+.habit-form__freq-tabs {
+  @apply flex gap-2;
+}
+
+.habit-form__freq-tab {
+  @apply flex-1 py-2 rounded-lg text-sm font-medium border cursor-pointer transition-colors;
+  background: transparent;
+  border-color: var(--color-awake-border);
+  color: var(--color-awake-text-muted);
+}
+
+.habit-form__freq-tab--active {
+  background: var(--petrol);
+  border-color: var(--petrol);
+  color: #fff;
+}
+
+.habit-form__weekdays {
+  @apply flex gap-1.5 flex-wrap;
+}
+
+.habit-form__weekday {
+  @apply w-10 h-10 rounded-full text-xs font-medium border cursor-pointer transition-colors;
+  background: transparent;
+  border-color: var(--color-awake-border);
+  color: var(--color-awake-text-muted);
+}
+
+.habit-form__weekday--active {
+  background: var(--petrol);
+  border-color: var(--petrol);
+  color: #fff;
+}
+
+.habit-form__actions {
+  @apply flex gap-3 justify-end pt-2;
+}

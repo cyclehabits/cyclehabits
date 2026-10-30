@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useTheme } from '@/contexts/theme/useTheme'
 import { Button } from '@awakr/awake-ui/button'
+import { BottomNav } from '@/components/nav/BottomNav'
+import { Outlet } from 'react-router-dom'
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>
@@ -50,12 +52,13 @@ function ThemeToggle() {
   )
 }
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout() {
   return (
     <>
       <ThemeToggle />
       <InstallButton />
-      {children}
+      <Outlet />
+      <BottomNav />
     </>
   )
 }

@@ -1,0 +1,45 @@
+@reference "tailwindcss";
+
+.bottom-nav {
+  @apply fixed bottom-0 left-0 right-0 flex items-center justify-around;
+  height: calc(4rem + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-inline: var(--space-2, 8px);
+  background: var(--color-awake-surface);
+  border-top: 1px solid var(--color-awake-border);
+  box-shadow: 0 -4px 20px rgba(15, 37, 51, 0.06);
+  z-index: 40;
+}
+
+.nav-item {
+  @apply flex flex-col items-center justify-center gap-1 flex-1 h-full no-underline transition-colors;
+  color: var(--color-awake-text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.nav-item--active {
+  color: var(--petrol);
+}
+
+.nav-item--active svg {
+  transform: scale(1.1);
+}
+
+.nav-fab {
+  @apply flex items-center justify-center flex-shrink-0 no-underline transition-all;
+  width: 52px;
+  height: 52px;
+  border-radius: 9999px;
+  background: var(--petrol);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--petrol) 45%, transparent);
+  margin-top: -20px;
+  text-decoration: none;
+}
+
+.nav-fab:hover {
+  background: var(--petrol-hover);
+  transform: scale(1.05);
+}
