@@ -7,9 +7,14 @@ import { useHabits } from '@/hooks/useHabits'
 import { useHabitsLog } from '@/hooks/useHabitsLog'
 import { isHabitScheduledForDate, formatDate } from '@/utils/habit'
 import './TodayPage.css'
+import { useLocation } from 'react-router-dom'
 
 export default function TodayPage() {
-  const [selectedDate, setSelectedDate] = useState(new Date())
+  const location = useLocation()
+const [selectedDate, setSelectedDate] = useState<Date>(() => {
+  const s = location.state as { date?: string } | null
+  return s?.date ? new Date(s.date + 'T12:00:00') : new Date()
+})
   const dateStr = formatDate(selectedDate)
 
   const { habits, loading } = useHabits()
