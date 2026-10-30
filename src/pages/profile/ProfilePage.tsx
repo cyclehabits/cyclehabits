@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import i18n from '@/i18n'
 import { useTheme } from '@/contexts/theme/useTheme'
+import { useInstallPrompt } from '@/hooks/useInstallPrompt'
 import { useAuth } from '@/contexts/auth/useAuth'
 import { Button } from '@awakr/awake-ui/button'
 import './ProfilePage.css'
@@ -14,6 +15,7 @@ const LANGUAGES = [
 export default function ProfilePage() {
   const { t } = useTranslation()
   const { theme, toggleTheme } = useTheme()
+  const { canInstall, install } = useInstallPrompt()
   const { user, signOut } = useAuth()
 
   return (
@@ -56,6 +58,14 @@ export default function ProfilePage() {
             {theme === 'dark' ? `☀️  ${t('settings.light')}` : `🌙  ${t('settings.dark')}`}
           </button>
         </section>
+
+        {canInstall && (
+          <section className="profile-section">
+            <Button variant="outline" size="md" onClick={install}>
+              ⬇️  {t('settings.install')}
+            </Button>
+          </section>
+        )}
 
         <section className="profile-section profile-section--logout">
           <Button variant="ghost" size="md" onClick={signOut}>

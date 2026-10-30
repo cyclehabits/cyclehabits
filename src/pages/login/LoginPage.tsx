@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import i18n from '@/i18n'
+import { useInstallPrompt } from '@/hooks/useInstallPrompt'
 import { useTheme } from '@/contexts/theme/useTheme'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -38,6 +39,7 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { theme, toggleTheme } = useTheme()
+  const { canInstall, install } = useInstallPrompt()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -247,6 +249,12 @@ export default function LoginPage() {
           {t('login.google')}
         </Button>
       </div>
+
+      {canInstall && (
+        <button className="login-install-btn" onClick={install}>
+          ⬇️  {t('settings.install')}
+        </button>
+      )}
 
       <p className="login-footer">
         {t('login.terms')}{' '}

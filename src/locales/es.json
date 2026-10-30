@@ -53,7 +53,8 @@
     "theme": "Tema",
     "dark": "Oscuro",
     "light": "Claro",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "install": "Instalar app"
   },
   "login": {
     "title": "CycleHabits",

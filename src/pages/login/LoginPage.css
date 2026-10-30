@@ -90,3 +90,11 @@
   border: none;
   cursor: pointer;
 }
+
+.login-install-btn {
+  @apply text-sm font-medium px-4 py-2 rounded-lg transition-colors;
+  background: transparent;
+  border: 1px solid var(--color-awake-border);
+  color: var(--color-awake-text-muted);
+  cursor: pointer;
+}
