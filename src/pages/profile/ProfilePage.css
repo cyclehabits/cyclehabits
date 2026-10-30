@@ -63,7 +63,8 @@
 }
 
 .profile-theme-btn {
-  @apply w-full py-3 rounded-lg text-sm font-medium text-left px-4 transition-colors;
+  @apply inline-flex items-center gap-2 py-2 px-5 rounded-lg text-sm font-medium transition-colors;
+  align-self: flex-start;
   background: var(--color-awake-surface);
   color: var(--color-awake-text);
   border: 1.5px solid var(--color-awake-border, transparent);
