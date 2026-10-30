@@ -5,20 +5,16 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
-// Captura global antes do React montar
+// Captura o evento antes do React montar (ele dispara cedo demais para o useEffect)
 let _deferredPrompt: BeforeInstallPromptEvent | null = null
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault()
   _deferredPrompt = e as BeforeInstallPromptEvent
 })
 
-function isInstalledAsPWA() {
-  return window.matchMedia('(display-mode: standalone)').matches
-}
-
 export function useInstallPrompt() {
   const [prompt, setPrompt] = useState<BeforeInstallPromptEvent | null>(_deferredPrompt)
-  const [installed, setInstalled] = useState(isInstalledAsPWA)
+  const [justInstalled, setJustInstalled] = useState(false)
 
   useEffect(() => {
     function onBeforeInstall(e: Event) {
@@ -31,11 +27,12 @@ export function useInstallPrompt() {
     function onAppInstalled() {
       _deferredPrompt = null
       setPrompt(null)
-      setInstalled(true)
+      setJustInstalled(true)
     }
 
     window.addEventListener('beforeinstallprompt', onBeforeInstall)
     window.addEventListener('appinstalled', onAppInstalled)
+
     return () => {
       window.removeEventListener('beforeinstallprompt', onBeforeInstall)
       window.removeEventListener('appinstalled', onAppInstalled)
@@ -49,14 +46,15 @@ export function useInstallPrompt() {
     if (outcome === 'accepted') {
       _deferredPrompt = null
       setPrompt(null)
-      setInstalled(true)
+      setJustInstalled(true)
     }
   }
 
-  // Mostra botão se não está instalado como PWA
-  // canInstall com prompt = instala direto; sem prompt = mostra instrução manual
+  // Avaliado a cada render: evita valor stale após refresh no browser
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+
   return {
-    canInstall: !installed,
+    canInstall: !isStandalone && !justInstalled,
     hasPrompt: !!prompt,
     install,
   }
