@@ -5,21 +5,46 @@ import { Field } from '@awakr/awake-ui/field'
 import type { Frequency } from '@/types/habit'
 import './HabitForm.css'
 
+export interface HabitFormValues {
+  name: string
+  description?: string
+  frequency: Frequency
+  time?: string
+  duration?: number
+}
+
 interface HabitFormProps {
-  onSubmit: (data: { name: string; description?: string; frequency: Frequency }) => void
+  initialValues?: Partial<HabitFormValues>
+  onSubmit: (data: HabitFormValues) => void
   onCancel: () => void
   loading?: boolean
 }
 
-export function HabitForm({ onSubmit, onCancel, loading }: HabitFormProps) {
+type FreqType = 'once' | 'daily' | 'weekly' | 'monthly' | 'every'
+
+const DURATION_OPTIONS = [15, 30, 45, 60, 90, 120]
+
+export function HabitForm({ initialValues, onSubmit, onCancel, loading }: HabitFormProps) {
   const { t } = useTranslation()
   const WEEK_DAYS = t('weekdays.short', { returnObjects: true }) as string[]
 
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [freqType, setFreqType] = useState<'daily' | 'weekly' | 'monthly'>('daily')
-  const [weekDays, setWeekDays] = useState<number[]>([])
-  const [monthDay, setMonthDay] = useState(1)
+  const initFreq = initialValues?.frequency
+  const initFreqType = (initFreq?.type ?? 'daily') as FreqType
+
+  const [name, setName] = useState(initialValues?.name ?? '')
+  const [description, setDescription] = useState(initialValues?.description ?? '')
+  const [freqType, setFreqType] = useState<FreqType>(initFreqType)
+  const [weekDays, setWeekDays] = useState<number[]>(
+    initFreq?.type === 'weekly' ? initFreq.days : [],
+  )
+  const [monthDay, setMonthDay] = useState(
+    initFreq?.type === 'monthly' ? initFreq.day : 1,
+  )
+  const [everyDays, setEveryDays] = useState(
+    initFreq?.type === 'every' ? initFreq.days : 2,
+  )
+  const [time, setTime] = useState(initialValues?.time ?? '')
+  const [duration, setDuration] = useState<number | ''>(initialValues?.duration ?? '')
 
   function toggleWeekDay(day: number) {
     setWeekDays(prev =>
@@ -27,16 +52,32 @@ export function HabitForm({ onSubmit, onCancel, loading }: HabitFormProps) {
     )
   }
 
+  function buildFrequency(): Frequency {
+    if (freqType === 'once') return { type: 'once' }
+    if (freqType === 'weekly') return { type: 'weekly', days: weekDays }
+    if (freqType === 'monthly') return { type: 'monthly', day: monthDay }
+    if (freqType === 'every') return { type: 'every', days: everyDays }
+    return { type: 'daily' }
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!name.trim()) return
+    onSubmit({
+      name: name.trim(),
+      description: description.trim() || undefined,
+      frequency: buildFrequency(),
+      time: time || undefined,
+      duration: duration !== '' ? duration : undefined,
+    })
+  }
 
-    let frequency: Frequency
-    if (freqType === 'daily') frequency = { type: 'daily' }
-    else if (freqType === 'weekly') frequency = { type: 'weekly', days: weekDays }
-    else frequency = { type: 'monthly', day: monthDay }
-
-    onSubmit({ name: name.trim(), description: description.trim() || undefined, frequency })
+  const FREQ_LABELS: Record<FreqType, string> = {
+    once: t('habits.form.once'),
+    daily: t('habits.form.daily'),
+    weekly: t('habits.form.weekly'),
+    monthly: t('habits.form.monthly'),
+    every: t('habits.form.every'),
   }
 
   return (
@@ -65,14 +106,14 @@ export function HabitForm({ onSubmit, onCancel, loading }: HabitFormProps) {
       <div className="habit-form__field">
         <label className="habit-form__label">{t('habits.form.frequency')}</label>
         <div className="habit-form__freq-tabs">
-          {(['daily', 'weekly', 'monthly'] as const).map(type => (
+          {(['once', 'daily', 'weekly', 'monthly', 'every'] as FreqType[]).map(type => (
             <button
               key={type}
               type="button"
               className={`habit-form__freq-tab${freqType === type ? ' habit-form__freq-tab--active' : ''}`}
               onClick={() => setFreqType(type)}
             >
-              {{ daily: t('habits.form.daily'), weekly: t('habits.form.weekly'), monthly: t('habits.form.monthly') }[type]}
+              {FREQ_LABELS[type]}
             </button>
           ))}
         </div>
@@ -108,6 +149,47 @@ export function HabitForm({ onSubmit, onCancel, loading }: HabitFormProps) {
           />
         </Field.Root>
       )}
+
+      {freqType === 'every' && (
+        <div className="habit-form__field">
+          <label className="habit-form__label">{t('habits.form.every')}</label>
+          <div className="habit-form__every">
+            <Field.Control
+              type="number"
+              min={1}
+              max={365}
+              value={everyDays}
+              onChange={e => setEveryDays(Math.max(1, Number(e.target.value)))}
+            />
+            <span className="habit-form__every-label">{t('habits.form.everyDays')}</span>
+          </div>
+        </div>
+      )}
+
+      <div className="habit-form__field">
+        <label className="habit-form__label">{t('habits.form.time')}</label>
+        <Field.Control
+          type="time"
+          value={time}
+          onChange={e => setTime(e.target.value)}
+        />
+      </div>
+
+      <div className="habit-form__field">
+        <label className="habit-form__label">{t('habits.form.duration')}</label>
+        <select
+          className="habit-form__select"
+          value={duration}
+          onChange={e => setDuration(e.target.value === '' ? '' : Number(e.target.value))}
+        >
+          <option value="">{t('habits.form.durationNone')}</option>
+          {DURATION_OPTIONS.map(min => (
+            <option key={min} value={min}>
+              {min} {t('habits.form.durationMin')}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="habit-form__actions">
         <Button type="button" variant="ghost" size="md" onClick={onCancel}>

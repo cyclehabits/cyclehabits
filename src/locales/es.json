@@ -30,8 +30,16 @@
       "days": "Días",
       "day": "Día del mes",
       "save": "Guardar",
-      "cancel": "Cancelar"
-    }
+      "cancel": "Cancelar",
+      "every": "Cada",
+      "everyDays": "días",
+      "once": "Único",
+      "time": "Horario (opcional)",
+      "duration": "Duración (opcional)",
+      "durationNone": "Sin duración",
+      "durationMin": "min"
+    },
+    "edit": "Editar hábito"
   },
   "history": {
     "title": "Historial",

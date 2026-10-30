@@ -2,12 +2,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { collection, addDoc } from 'firebase/firestore'
 import { db } from '@/lib/firestore'
 import { useAuth } from '@/contexts/auth/useAuth'
-import type { Habit, Frequency } from '@/types/habit'
+import type { Frequency } from '@/types/habit'
 
 interface CreateHabitInput {
   name: string
   description?: string
   frequency: Frequency
+  time?: string
+  duration?: number
 }
 
 export function useCreateHabit() {
