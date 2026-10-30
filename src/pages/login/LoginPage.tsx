@@ -65,18 +65,32 @@ export default function LoginPage() {
     }
   }
 
+  // async function handleGoogle() {
+  //   setError('')
+  //   setLoading(true)
+  //   try {
+  //     await signInWithPopup(auth, new GoogleAuthProvider())
+  //     navigate('/today')
+  //   } catch {
+  //     setError('Falha ao entrar com Google.')
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
   async function handleGoogle() {
-    setError('')
-    setLoading(true)
-    try {
-      await signInWithPopup(auth, new GoogleAuthProvider())
-      navigate('/today')
-    } catch {
-      setError('Falha ao entrar com Google.')
-    } finally {
-      setLoading(false)
-    }
+  setError('')
+  setLoading(true)
+  try {
+    await signInWithPopup(auth, new GoogleAuthProvider())
+    navigate('/today')
+  } catch (err) {
+    console.error('Google auth error:', err)  // ← adicione isso
+    setError('Falha ao entrar com Google.')
+  } finally {
+    setLoading(false)
   }
+}
 
   async function handleForgotPassword() {
     if (!email) {

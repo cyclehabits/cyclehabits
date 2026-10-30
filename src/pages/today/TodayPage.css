@@ -1,0 +1,21 @@
+@reference "tailwindcss";
+
+.today-page {
+  @apply min-h-screen;
+  background: var(--bg-page);
+}
+
+.today-page--loading {
+  @apply flex items-center justify-center;
+  color: var(--color-awake-text-muted);
+  font-size: 0.875rem;
+}
+
+.today-page__inner {
+  @apply max-w-lg mx-auto px-4 pb-24 flex flex-col gap-5;
+  padding-top: max(4.5rem, env(safe-area-inset-top, 0px) + 4rem);
+}
+
+.today-page__section {
+  @apply flex flex-col gap-3;
+}

@@ -1,0 +1,15 @@
+@reference "tailwindcss";
+
+.page-header {
+  @apply pt-4 pb-2;
+}
+
+.page-header__title {
+  @apply text-2xl font-extrabold tracking-tight;
+  color: var(--color-awake-text);
+}
+
+.page-header__sub {
+  @apply text-sm mt-0.5;
+  color: var(--color-awake-text-muted);
+}

@@ -1,0 +1,34 @@
+@reference "tailwindcss";
+
+.daily-progress {
+  @apply flex flex-col gap-2;
+}
+
+.daily-progress__header {
+  @apply flex justify-between items-center;
+}
+
+.daily-progress__label {
+  @apply text-xs font-medium uppercase tracking-wide;
+  color: var(--color-awake-text-muted);
+}
+
+.daily-progress__count {
+  @apply text-sm font-bold;
+  color: var(--petrol);
+}
+
+.daily-progress__bar-track {
+  @apply h-2 rounded-full overflow-hidden;
+  background: var(--color-awake-border);
+}
+
+.daily-progress__bar-fill {
+  @apply h-full rounded-full transition-all duration-500;
+  background: var(--petrol);
+}
+
+.daily-progress__congrats {
+  @apply text-xs text-center mt-1;
+  color: var(--color-awake-text-muted);
+}

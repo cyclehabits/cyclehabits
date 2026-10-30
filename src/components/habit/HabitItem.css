@@ -1,0 +1,52 @@
+
+@reference "tailwindcss";
+
+.habit-item {
+  @apply flex items-center gap-3 py-3 px-4 rounded-xl transition-opacity;
+  background: var(--color-awake-surface);
+  border: 1px solid var(--color-awake-border);
+}
+
+.habit-item--ignored {
+  opacity: 0.45;
+}
+
+.habit-item--done .habit-item__name {
+  text-decoration: line-through;
+  color: var(--color-awake-text-muted);
+}
+
+.habit-item__check {
+  @apply w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 border-2 cursor-pointer transition-colors;
+  background: transparent;
+}
+
+.habit-item--pending .habit-item__check {
+  border-color: var(--color-awake-border);
+  color: var(--color-awake-text-muted);
+}
+
+.habit-item--done .habit-item__check {
+  background: var(--petrol);
+  border-color: var(--petrol);
+  color: #fff;
+}
+
+.habit-item--ignored .habit-item__check {
+  border-color: var(--color-awake-border);
+  color: var(--color-awake-text-subtle);
+}
+
+.habit-item__body {
+  @apply flex flex-col gap-0.5 min-w-0;
+}
+
+.habit-item__name {
+  @apply text-sm font-medium truncate;
+  color: var(--color-awake-text);
+}
+
+.habit-item__desc {
+  @apply text-xs truncate;
+  color: var(--color-awake-text-muted);
+}

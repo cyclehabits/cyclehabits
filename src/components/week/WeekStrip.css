@@ -1,0 +1,40 @@
+@reference "tailwindcss";
+
+.week-strip {
+  @apply flex justify-between gap-1 px-1;
+}
+
+.week-strip__day {
+  @apply flex flex-col items-center gap-1 py-2 px-1 rounded-xl flex-1 border-none cursor-pointer transition-colors;
+  background: transparent;
+  color: var(--color-awake-text);
+}
+
+.week-strip__day--today .week-strip__num {
+  font-weight: 700;
+  color: var(--petrol);
+}
+
+.week-strip__day--selected {
+  background: var(--petrol);
+  color: #fff !important;
+}
+
+.week-strip__day--selected .week-strip__num,
+.week-strip__day--selected .week-strip__label {
+  color: #fff !important;
+}
+
+.week-strip__day:not(.week-strip__day--selected):hover {
+  background: var(--color-awake-surface-hover, rgba(26,107,138,0.08));
+}
+
+.week-strip__label {
+  @apply text-[10px] uppercase tracking-wide;
+  color: var(--color-awake-text-muted);
+}
+
+.week-strip__num {
+  @apply text-base font-semibold;
+  color: var(--color-awake-text);
+}
