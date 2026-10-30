@@ -54,7 +54,8 @@
     "dark": "Dark",
     "light": "Light",
     "logout": "Sign out",
-    "install": "Install app"
+    "install": "Install app",
+    "install_hint": "To install: tap Menu (⋮) → Install app"
   },
   "login": {
     "title": "CycleHabits",

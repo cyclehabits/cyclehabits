@@ -69,3 +69,8 @@
   color: var(--color-awake-text);
   border: 1.5px solid var(--color-awake-border, transparent);
 }
+
+.profile-install-hint {
+  @apply text-xs;
+  color: var(--color-awake-text-muted);
+}

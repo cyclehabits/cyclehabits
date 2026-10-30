@@ -98,3 +98,8 @@
   color: var(--color-awake-text-muted);
   cursor: pointer;
 }
+
+.login-install-hint {
+  @apply text-xs text-center;
+  color: var(--color-awake-text-muted);
+}

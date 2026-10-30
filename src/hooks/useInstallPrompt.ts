@@ -12,18 +12,34 @@ window.addEventListener('beforeinstallprompt', (e) => {
   _deferredPrompt = e as BeforeInstallPromptEvent
 })
 
+function isInstalledAsPWA() {
+  return window.matchMedia('(display-mode: standalone)').matches
+}
+
 export function useInstallPrompt() {
   const [prompt, setPrompt] = useState<BeforeInstallPromptEvent | null>(_deferredPrompt)
+  const [installed, setInstalled] = useState(isInstalledAsPWA)
 
   useEffect(() => {
-    function handler(e: Event) {
+    function onBeforeInstall(e: Event) {
       e.preventDefault()
       const evt = e as BeforeInstallPromptEvent
       _deferredPrompt = evt
       setPrompt(evt)
     }
-    window.addEventListener('beforeinstallprompt', handler)
-    return () => window.removeEventListener('beforeinstallprompt', handler)
+
+    function onAppInstalled() {
+      _deferredPrompt = null
+      setPrompt(null)
+      setInstalled(true)
+    }
+
+    window.addEventListener('beforeinstallprompt', onBeforeInstall)
+    window.addEventListener('appinstalled', onAppInstalled)
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBeforeInstall)
+      window.removeEventListener('appinstalled', onAppInstalled)
+    }
   }, [])
 
   async function install() {
@@ -33,8 +49,15 @@ export function useInstallPrompt() {
     if (outcome === 'accepted') {
       _deferredPrompt = null
       setPrompt(null)
+      setInstalled(true)
     }
   }
 
-  return { canInstall: !!prompt, install }
+  // Mostra botão se não está instalado como PWA
+  // canInstall com prompt = instala direto; sem prompt = mostra instrução manual
+  return {
+    canInstall: !installed,
+    hasPrompt: !!prompt,
+    install,
+  }
 }

@@ -54,7 +54,8 @@
     "dark": "Oscuro",
     "light": "Claro",
     "logout": "Cerrar sesión",
-    "install": "Instalar app"
+    "install": "Instalar app",
+    "install_hint": "Para instalar: Menú (⋮) → Instalar app"
   },
   "login": {
     "title": "CycleHabits",
