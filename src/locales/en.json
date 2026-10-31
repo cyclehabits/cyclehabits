@@ -42,7 +42,13 @@
       "thisDay": "Only this day",
       "allEvents": "All events"
     },
-    "editDay": "Edit this day"
+    "editDay": "Edit this day",
+    "delete": "Delete",
+    "deleteScope": {
+      "title": "What would you like to delete?",
+      "thisDay": "Only this day",
+      "allEvents": "All events"
+    }
   },
   "history": {
     "title": "History",

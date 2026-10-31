@@ -10,6 +10,7 @@ interface UpsertOverrideInput {
   description?: string
   startTime?: string
   endTime?: string
+  deleted?: boolean
 }
 
 export function useUpsertOverride() {
@@ -17,7 +18,7 @@ export function useUpsertOverride() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ habitId, date, name, description, startTime, endTime }: UpsertOverrideInput) => {
+    mutationFn: async ({ habitId, date, name, description, startTime, endTime, deleted }: UpsertOverrideInput) => {
       if (!user) throw new Error('Não autenticado')
       const overrideId = `${habitId}_${date}`
       await setDoc(
@@ -29,6 +30,7 @@ export function useUpsertOverride() {
           description: description ?? deleteField(),
           startTime: startTime ?? deleteField(),
           endTime: endTime ?? deleteField(),
+          deleted: deleted ?? deleteField(),
         },
         { merge: true },
       )

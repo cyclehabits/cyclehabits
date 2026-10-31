@@ -10,8 +10,11 @@ export function isHabitScheduledForDate(habit: Habit, date: Date): boolean {
   if (frequency.type === 'weekly') return frequency.days.includes(date.getDay())
   if (frequency.type === 'monthly') return frequency.day === date.getDate()
   if (frequency.type === 'every') {
-    const origin = new Date(habit.createdAt)
-    const diff = Math.floor((date.getTime() - origin.getTime()) / 86_400_000)
+    const o = new Date(habit.createdAt)
+    // Normaliza para meia-noite local para evitar problemas de fuso horário
+    const origin = new Date(o.getFullYear(), o.getMonth(), o.getDate())
+    const day   = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+    const diff  = Math.round((day.getTime() - origin.getTime()) / 86_400_000)
     return diff >= 0 && diff % frequency.days === 0
   }
   return false

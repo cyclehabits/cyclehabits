@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next'
 import type { Habit, HabitLog, HabitStatus, HabitOverride } from '@/types/habit'
 import { isRecurring } from '@/utils/habit'
 import { EditScopeModal } from './EditScopeModal'
+import { DeleteScopeModal } from './DeleteScopeModal'
+import { useDeleteHabit } from '@/hooks/useDeleteHabit'
+import { useDeleteHabitDay } from '@/hooks/useDeleteHabitDay'
 import '@/components/habit/HabitItem.css'
 
 interface HabitItemProps {
@@ -33,6 +36,14 @@ const IconEdit = () => (
   </svg>
 )
 
+const IconTrash = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+    <polyline points="1,3 13,3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+    <path d="M5 3V2h4v1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+    <path d="M2.5 3l.8 8.5h5.4L9.5 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
+
 const StatusDot = ({ status }: { status: HabitStatus }) => {
   if (status === 'done') return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
@@ -55,7 +66,11 @@ const StatusDot = ({ status }: { status: HabitStatus }) => {
 export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [showScopeModal, setShowScopeModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+  const deleteHabit = useDeleteHabit()
+  const deleteHabitDay = useDeleteHabitDay()
 
   const status: HabitStatus = log?.status ?? 'pending'
   const displayName = override?.name ?? habit.name
@@ -73,18 +88,26 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
     if (!isRecurring(habit)) {
       navigate(`/habits?edit=${habit.id}`)
     } else {
-      setShowScopeModal(true)
+      setShowEditModal(true)
     }
   }
 
-  function handleEditThisDay() {
-    setShowScopeModal(false)
-    navigate(`/habits?edit=${habit.id}&date=${date}`)
+  function handleDeleteClick() {
+    if (!isRecurring(habit)) {
+      deleteHabit.mutate(habit.id)
+    } else {
+      setShowDeleteModal(true)
+    }
   }
 
-  function handleEditAllEvents() {
-    setShowScopeModal(false)
-    navigate(`/habits?edit=${habit.id}`)
+  function handleDeleteThisDay() {
+    setShowDeleteModal(false)
+    deleteHabitDay.mutate({ habitId: habit.id, date })
+  }
+
+  function handleDeleteAllEvents() {
+    setShowDeleteModal(false)
+    deleteHabit.mutate(habit.id)
   }
 
   function handleDone() {
@@ -137,14 +160,30 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
           >
             <IconEdit />
           </button>
+          <button
+            className="habit-item__delete"
+            onClick={handleDeleteClick}
+            aria-label={t('habits.delete')}
+            title={t('habits.delete')}
+          >
+            <IconTrash />
+          </button>
         </div>
       </li>
 
-      {showScopeModal && (
+      {showEditModal && (
         <EditScopeModal
-          onThisDay={handleEditThisDay}
-          onAllEvents={handleEditAllEvents}
-          onClose={() => setShowScopeModal(false)}
+          onThisDay={() => { setShowEditModal(false); navigate(`/habits?edit=${habit.id}&date=${date}`) }}
+          onAllEvents={() => { setShowEditModal(false); navigate(`/habits?edit=${habit.id}`) }}
+          onClose={() => setShowEditModal(false)}
+        />
+      )}
+
+      {showDeleteModal && (
+        <DeleteScopeModal
+          onThisDay={handleDeleteThisDay}
+          onAllEvents={handleDeleteAllEvents}
+          onClose={() => setShowDeleteModal(false)}
         />
       )}
     </>

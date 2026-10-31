@@ -28,6 +28,7 @@ export interface HabitOverride {
   description?: string
   startTime?: string
   endTime?: string
+  deleted?: boolean
 }
 
 export interface HabitLog {

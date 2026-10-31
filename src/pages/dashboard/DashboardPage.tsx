@@ -25,14 +25,16 @@ export default function DashboardPage() {
   const { logs, updateLog } = useHabitsLog(dateStr)
   const { data: overridesList = [] } = useHabitOverrides(dateStr)
 
-  const todayHabits = useMemo(
-    () => habits.filter((h) => isHabitScheduledForDate(h, selectedDate)),
-    [habits, selectedDate],
-  )
-
   const overridesMap = useMemo(
     () => Object.fromEntries(overridesList.map((o: HabitOverride) => [o.habitId, o])),
     [overridesList],
+  )
+
+  const todayHabits = useMemo(
+    () => habits.filter((h) =>
+      isHabitScheduledForDate(h, selectedDate) && !overridesMap[h.id]?.deleted
+    ),
+    [habits, selectedDate, overridesMap],
   )
 
   const doneCount = todayHabits.filter((h) => logs[h.id]?.status === 'done').length

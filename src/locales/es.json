@@ -42,7 +42,13 @@
       "thisDay": "Solo este día",
       "allEvents": "Todos los eventos"
     },
-    "editDay": "Editar este día"
+    "editDay": "Editar este día",
+    "delete": "Eliminar",
+    "deleteScope": {
+      "title": "¿Qué deseas eliminar?",
+      "thisDay": "Solo este día",
+      "allEvents": "Todos los eventos"
+    }
   },
   "history": {
     "title": "Historial",
