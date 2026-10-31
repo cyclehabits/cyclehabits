@@ -14,10 +14,42 @@ interface HabitItemProps {
   onUpdate: (habitId: string, status: HabitStatus) => void
 }
 
-const STATUS_ICON: Record<HabitStatus, string> = {
-  pending: '○',
-  done: '✓',
-  ignored: '–',
+const IconCheck = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+    <polyline points="2,7 6,11 12,3" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
+
+const IconSkip = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+    <line x1="3" y1="7" x2="11" y2="7" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
+    <polyline points="8,4 11,7 8,10" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
+
+const IconEdit = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden>
+    <path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
+
+const StatusDot = ({ status }: { status: HabitStatus }) => {
+  if (status === 'done') return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
+      <polyline points="5.5,10 8.5,13 14.5,7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+  if (status === 'ignored') return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 2"/>
+    </svg>
+  )
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.5"/>
+    </svg>
+  )
 }
 
 export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemProps) {
@@ -67,7 +99,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
     <>
       <li className={`habit-item habit-item--${status}`}>
         <div className="habit-item__status">
-          {STATUS_ICON[status]}
+          <StatusDot status={status} />
         </div>
 
         <div className="habit-item__body">
@@ -87,7 +119,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
             aria-label={t('habits.done')}
             title={t('habits.done')}
           >
-            ✓
+            <IconCheck />
           </button>
           <button
             className={`habit-item__btn habit-item__btn--ignore${status === 'ignored' ? ' habit-item__btn--active' : ''}`}
@@ -95,7 +127,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
             aria-label={t('habits.ignore')}
             title={t('habits.ignore')}
           >
-            –
+            <IconSkip />
           </button>
           <button
             className="habit-item__edit"
@@ -103,7 +135,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
             aria-label={t('habits.edit')}
             title={t('habits.edit')}
           >
-            ✎
+            <IconEdit />
           </button>
         </div>
       </li>
