@@ -216,23 +216,17 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
 
           {/* Botões de ação sempre visíveis */}
           <div className="habit-card__right">
-            {/* Ignore / Reverter */}
+            {/* Ignore — só quando pendente */}
             {status === 'pending' && (
               <button
                 className="habit-card__action-btn habit-card__action-btn--ignore"
+                onPointerDown={e => e.stopPropagation()}
+                onPointerMove={e => e.stopPropagation()}
+                onPointerUp={e => e.stopPropagation()}
                 onClick={() => onUpdate(habit.id, 'ignored')}
                 aria-label={t('habits.ignore')}
               >
                 <IconSkip />
-              </button>
-            )}
-            {(status === 'done' || status === 'ignored') && (
-              <button
-                className="habit-card__action-btn habit-card__action-btn--revert"
-                onClick={() => onUpdate(habit.id, 'pending')}
-                aria-label={status === 'done' ? t('habits.undone') : t('habits.revert')}
-              >
-                ↩
               </button>
             )}
 
@@ -240,6 +234,9 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
             {status === 'pending' && (
               <button
                 className="habit-card__check"
+                onPointerDown={e => e.stopPropagation()}
+                onPointerMove={e => e.stopPropagation()}
+                onPointerUp={e => e.stopPropagation()}
                 onClick={() => onUpdate(habit.id, 'done')}
                 aria-label={t('habits.done')}
               >
@@ -249,6 +246,9 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
             {status === 'done' && (
               <button
                 className="habit-card__check habit-card__check--done"
+                onPointerDown={e => e.stopPropagation()}
+                onPointerMove={e => e.stopPropagation()}
+                onPointerUp={e => e.stopPropagation()}
                 aria-label={t('habits.undone')}
                 onClick={() => onUpdate(habit.id, 'pending')}
               >
@@ -258,6 +258,9 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
             {status === 'ignored' && (
               <button
                 className="habit-card__check habit-card__check--ignored"
+                onPointerDown={e => e.stopPropagation()}
+                onPointerMove={e => e.stopPropagation()}
+                onPointerUp={e => e.stopPropagation()}
                 aria-label={t('habits.revert')}
                 onClick={() => onUpdate(habit.id, 'pending')}
               >
@@ -274,11 +277,25 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
                   ? t('habits.doneAt', { time: completedAt })
                   : t('habits.doneFeedback')}
               </span>
+              <button
+                onPointerDown={e => e.stopPropagation()}
+                onPointerUp={e => e.stopPropagation()}
+                onClick={() => onUpdate(habit.id, 'pending')}
+              >
+                {t('habits.undone')}
+              </button>
             </div>
           )}
           {status === 'ignored' && (
             <div className="habit-card__footer habit-card__footer--ignored">
               <span>{t('habits.ignoredFeedback')}</span>
+              <button
+                onPointerDown={e => e.stopPropagation()}
+                onPointerUp={e => e.stopPropagation()}
+                onClick={() => onUpdate(habit.id, 'pending')}
+              >
+                {t('habits.revert')}
+              </button>
             </div>
           )}
         </div>
