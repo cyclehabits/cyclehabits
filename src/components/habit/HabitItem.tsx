@@ -103,6 +103,8 @@ function useSwipe(onSwipeLeft: () => void, onClose: () => void) {
   const moved  = useRef(false)
 
   function onPointerDown(e: React.PointerEvent) {
+    const target = e.target as HTMLElement
+    if (target.closest('.habit-card__action-btn, .habit-card__check, .habit-card__footer button')) return
     startX.current = e.clientX
     startY.current = e.clientY
     moved.current  = false
@@ -193,9 +195,13 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
           </button>
         </div>
 
-        <div className={`habit-card habit-card--${status} habit-card--${category}`}>
-          {/* Área de arrasto: recebe os handlers + pointer capture */}
-          <div className="habit-card__swipe-area" {...swipe} style={{ touchAction: 'pan-y' }}>
+        <div
+          className={`habit-card habit-card--${status} habit-card--${category}`}
+          {...swipe}
+          style={{ touchAction: 'pan-y' }}
+        >
+          {/* Área de arrasto: demarca visualmente onde o swipe é esperado */}
+          <div className="habit-card__swipe-area">
             <div className="habit-card__icon" aria-hidden>
               {meta.icon}
             </div>
@@ -258,7 +264,8 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
                   ? t('habits.doneAt', { time: completedAt })
                   : t('habits.doneFeedback')}
               </span>
-              <button onClick={() => onUpdate(habit.id, 'pending')}>
+              <button 
+                onClick={() => onUpdate(habit.id, 'pending')} >
                 {t('habits.undone')}
               </button>
             </div>
@@ -266,7 +273,8 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
           {status === 'ignored' && (
             <div className="habit-card__footer habit-card__footer--ignored">
               <span>{t('habits.ignoredFeedback')}</span>
-              <button onClick={() => onUpdate(habit.id, 'pending')}>
+              <button 
+                onClick={() => onUpdate(habit.id, 'pending')}>
                 {t('habits.revert')}
               </button>
             </div>
