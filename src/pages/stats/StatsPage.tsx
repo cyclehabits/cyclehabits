@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/auth/useAuth'
 import { useHabits } from '@/hooks/useHabits'
 import { useQuery } from '@tanstack/react-query'
-import { collectionGroup, query, where, getDocs } from 'firebase/firestore'
+import { collection, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firestore'
 import { Loading } from '@awakr/awake-ui/loading'
 import type { HabitLog } from '@/types/habit'
@@ -11,6 +11,17 @@ import './StatsPage.css'
 
 function toLocalDateStr(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
+function dateRange(start: string, end: string): string[] {
+  const dates: string[] = []
+  const cursor = new Date(start + 'T00:00:00')
+  const endDate = new Date(end + 'T00:00:00')
+  while (cursor <= endDate) {
+    dates.push(toLocalDateStr(cursor))
+    cursor.setDate(cursor.getDate() + 1)
+  }
+  return dates
 }
 
 export default function StatsPage() {
@@ -29,13 +40,11 @@ export default function StatsPage() {
     queryKey: ['stats-logs', user?.uid, today.getFullYear(), today.getMonth()],
     enabled: !!user,
     queryFn: async () => {
-      const q = query(
-        collectionGroup(db, 'entries'),
-        where('date', '>=', monthStart),
-        where('date', '<=', monthEnd),
+      const dates = dateRange(monthStart, monthEnd)
+      const snaps = await Promise.all(
+        dates.map(date => getDocs(collection(db, 'users', user!.uid, 'logs', date, 'entries')))
       )
-      const snap = await getDocs(q)
-      return snap.docs.map(d => ({ ...d.data() } as unknown as HabitLog))
+      return snaps.flatMap(s => s.docs.map(d => d.data() as HabitLog))
     },
   })
 

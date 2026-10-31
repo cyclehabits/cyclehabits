@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/auth/useAuth'
 import { useHabits } from '@/hooks/useHabits'
 import { useQuery } from '@tanstack/react-query'
-import { collectionGroup, query, where, getDocs } from 'firebase/firestore'
+import { collection, getDocs } from 'firebase/firestore'
 import { db } from '@/lib/firestore'
 import type { HabitLog } from '@/types/habit'
 import { CalendarMonth } from './components/CalendarMonth'
@@ -13,6 +13,17 @@ import './HistoryPage.css'
 
 function toLocalDateStr(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+}
+
+function dateRange(start: string, end: string): string[] {
+  const dates: string[] = []
+  const cursor = new Date(start + 'T00:00:00')
+  const endDate = new Date(end + 'T00:00:00')
+  while (cursor <= endDate) {
+    dates.push(toLocalDateStr(cursor))
+    cursor.setDate(cursor.getDate() + 1)
+  }
+  return dates
 }
 
 function calcStreak(dayStats: Record<string, { done: number; total: number }>): number {
@@ -48,13 +59,11 @@ export default function HistoryPage() {
     queryKey: ['history-logs', user?.uid, year, month],
     enabled: !!user,
     queryFn: async () => {
-      const q = query(
-        collectionGroup(db, 'entries'),
-        where('date', '>=', monthStart),
-        where('date', '<=', monthEnd)
+      const dates = dateRange(monthStart, monthEnd)
+      const snaps = await Promise.all(
+        dates.map(date => getDocs(collection(db, 'users', user!.uid, 'logs', date, 'entries')))
       )
-      const snap = await getDocs(q)
-      return snap.docs.map(d => ({ ...d.data() } as unknown as HabitLog))
+      return snaps.flatMap(s => s.docs.map(d => d.data() as HabitLog))
     }
   })
 
@@ -64,13 +73,11 @@ export default function HistoryPage() {
     queryKey: ['streak-logs', user?.uid],
     enabled: !!user,
     queryFn: async () => {
-      const q = query(
-        collectionGroup(db, 'entries'),
-        where('date', '>=', streakStart),
-        where('date', '<=', toLocalDateStr(today))
+      const dates = dateRange(streakStart, toLocalDateStr(today))
+      const snaps = await Promise.all(
+        dates.map(date => getDocs(collection(db, 'users', user!.uid, 'logs', date, 'entries')))
       )
-      const snap = await getDocs(q)
-      return snap.docs.map(d => ({ ...d.data() } as unknown as HabitLog))
+      return snaps.flatMap(s => s.docs.map(d => d.data() as HabitLog))
     }
   })
 
