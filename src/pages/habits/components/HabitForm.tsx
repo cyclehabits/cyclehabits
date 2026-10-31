@@ -15,6 +15,7 @@ export interface HabitFormValues {
 
 interface HabitFormProps {
   initialValues?: Partial<HabitFormValues>
+  hideFrequency?: boolean
   onSubmit: (data: HabitFormValues) => void
   onCancel: () => void
   loading?: boolean
@@ -24,7 +25,13 @@ type FreqType = 'once' | 'daily' | 'weekly' | 'monthly' | 'every'
 
 const DURATION_OPTIONS = [15, 30, 45, 60, 90, 120]
 
-export function HabitForm({ initialValues, onSubmit, onCancel, loading }: HabitFormProps) {
+export function HabitForm({
+  initialValues,
+  hideFrequency = false,
+  onSubmit,
+  onCancel,
+  loading,
+}: HabitFormProps) {
   const { t } = useTranslation()
   const WEEK_DAYS = t('weekdays.short', { returnObjects: true }) as string[]
 
@@ -103,67 +110,71 @@ export function HabitForm({ initialValues, onSubmit, onCancel, loading }: HabitF
         />
       </Field.Root>
 
-      <div className="habit-form__field">
-        <label className="habit-form__label">{t('habits.form.frequency')}</label>
-        <div className="habit-form__freq-tabs">
-          {(['once', 'daily', 'weekly', 'monthly', 'every'] as FreqType[]).map(type => (
-            <button
-              key={type}
-              type="button"
-              className={`habit-form__freq-tab${freqType === type ? ' habit-form__freq-tab--active' : ''}`}
-              onClick={() => setFreqType(type)}
-            >
-              {FREQ_LABELS[type]}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {freqType === 'weekly' && (
-        <div className="habit-form__field">
-          <label className="habit-form__label">{t('habits.form.days')}</label>
-          <div className="habit-form__weekdays">
-            {WEEK_DAYS.map((label, i) => (
-              <button
-                key={i}
-                type="button"
-                className={`habit-form__weekday${weekDays.includes(i) ? ' habit-form__weekday--active' : ''}`}
-                onClick={() => toggleWeekDay(i)}
-              >
-                {label}
-              </button>
-            ))}
+      {!hideFrequency && (
+        <>
+          <div className="habit-form__field">
+            <label className="habit-form__label">{t('habits.form.frequency')}</label>
+            <div className="habit-form__freq-tabs">
+              {(['once', 'daily', 'weekly', 'monthly', 'every'] as FreqType[]).map(type => (
+                <button
+                  key={type}
+                  type="button"
+                  className={`habit-form__freq-tab${freqType === type ? ' habit-form__freq-tab--active' : ''}`}
+                  onClick={() => setFreqType(type)}
+                >
+                  {FREQ_LABELS[type]}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
 
-      {freqType === 'monthly' && (
-        <Field.Root>
-          <Field.Label>{t('habits.form.day')}</Field.Label>
-          <Field.Control
-            type="number"
-            min={1}
-            max={31}
-            value={monthDay}
-            onChange={e => setMonthDay(Number(e.target.value))}
-          />
-        </Field.Root>
-      )}
+          {freqType === 'weekly' && (
+            <div className="habit-form__field">
+              <label className="habit-form__label">{t('habits.form.days')}</label>
+              <div className="habit-form__weekdays">
+                {WEEK_DAYS.map((label, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`habit-form__weekday${weekDays.includes(i) ? ' habit-form__weekday--active' : ''}`}
+                    onClick={() => toggleWeekDay(i)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
-      {freqType === 'every' && (
-        <div className="habit-form__field">
-          <label className="habit-form__label">{t('habits.form.every')}</label>
-          <div className="habit-form__every">
-            <Field.Control
-              type="number"
-              min={1}
-              max={365}
-              value={everyDays}
-              onChange={e => setEveryDays(Math.max(1, Number(e.target.value)))}
-            />
-            <span className="habit-form__every-label">{t('habits.form.everyDays')}</span>
-          </div>
-        </div>
+          {freqType === 'monthly' && (
+            <Field.Root>
+              <Field.Label>{t('habits.form.day')}</Field.Label>
+              <Field.Control
+                type="number"
+                min={1}
+                max={31}
+                value={monthDay}
+                onChange={e => setMonthDay(Number(e.target.value))}
+              />
+            </Field.Root>
+          )}
+
+          {freqType === 'every' && (
+            <div className="habit-form__field">
+              <label className="habit-form__label">{t('habits.form.every')}</label>
+              <div className="habit-form__every">
+                <Field.Control
+                  type="number"
+                  min={1}
+                  max={365}
+                  value={everyDays}
+                  onChange={e => setEveryDays(Math.max(1, Number(e.target.value)))}
+                />
+                <span className="habit-form__every-label">{t('habits.form.everyDays')}</span>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       <div className="habit-form__field">

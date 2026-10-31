@@ -44,7 +44,8 @@
       "title": "O que deseja editar?",
       "thisDay": "Apenas este dia",
       "allEvents": "Todos os eventos"
-    }
+    },
+    "editDay": "Editar este dia"
   },
   "history": {
     "title": "Histórico",
