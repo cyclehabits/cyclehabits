@@ -176,5 +176,10 @@
     "ignored": "ignorados",
     "remaining": "restantes",
     "habits": "hábitos"
+  },
+  "profile": {
+    "displayName": "Nombre de usuario",
+    "save": "Guardar",
+    "saved": "¡Guardado!"
   }
 }

@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '@/i18n'
 import { useTheme } from '@/contexts/theme/useTheme'
 import { useInstallPrompt } from '@/hooks/useInstallPrompt'
 import { useAuth } from '@/contexts/auth/useAuth'
+import { useProfile } from '@/hooks/useProfile'
 import { Button } from '@awakr/awake-ui/button'
 import './ProfilePage.css'
 
@@ -17,6 +19,26 @@ export default function ProfilePage() {
   const { theme, toggleTheme } = useTheme()
   const { canInstall, hasPrompt, install } = useInstallPrompt()
   const { user, signOut } = useAuth()
+  const { profile, updateProfile } = useProfile()
+
+  const [nameInput, setNameInput] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+
+  useEffect(() => {
+    if (profile?.displayName) setNameInput(profile.displayName)
+  }, [profile?.displayName])
+
+  async function handleSaveName() {
+    if (!nameInput.trim() || nameInput === profile?.displayName) return
+    setSaving(true)
+    await updateProfile({ displayName: nameInput.trim() })
+    setSaving(false)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
+  const photoURL = profile?.photoURL || user?.photoURL || ''
 
   return (
     <div className="profile-page">
@@ -24,16 +46,36 @@ export default function ProfilePage() {
         <h1 className="profile-title">{t('nav.profile')}</h1>
 
         <section className="profile-section profile-section--user">
-          {user?.photoURL && (
+          {photoURL && (
             <img
-              src={user.photoURL}
-              alt={user.displayName ?? ''}
+              src={photoURL}
+              alt={profile?.displayName ?? ''}
               className="profile-avatar"
+              referrerPolicy="no-referrer"
             />
           )}
           <div>
-            <p className="profile-name">{user?.displayName}</p>
+            <p className="profile-name">{profile?.displayName || user?.displayName}</p>
             <p className="profile-email">{user?.email}</p>
+          </div>
+        </section>
+
+        <section className="profile-section">
+          <h2 className="profile-section__label">{t('profile.displayName')}</h2>
+          <div className="profile-name-edit">
+            <input
+              className="profile-name-input"
+              value={nameInput}
+              onChange={e => { setNameInput(e.target.value); setSaved(false) }}
+              onKeyDown={e => e.key === 'Enter' && handleSaveName()}
+            />
+            <button
+              className="profile-save-btn"
+              onClick={handleSaveName}
+              disabled={saving || !nameInput.trim() || nameInput === profile?.displayName}
+            >
+              {saving ? '…' : saved ? t('profile.saved') : t('profile.save')}
+            </button>
           </div>
         </section>
 

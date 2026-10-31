@@ -74,3 +74,47 @@
   @apply text-xs;
   color: var(--color-awake-text-muted);
 }
+
+/* ── Edição de nome ───────────────────────────────────────────────────────── */
+
+.profile-name-edit {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.profile-name-input {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--color-awake-border);
+  background: var(--color-awake-surface);
+  color: var(--color-awake-text);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color .15s;
+}
+
+.profile-name-input:focus {
+  border-color: var(--color-awake-primary);
+}
+
+.profile-save-btn {
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: none;
+  background: var(--color-awake-primary);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s;
+  white-space: nowrap;
+}
+
+.profile-save-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

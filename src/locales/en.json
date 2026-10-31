@@ -176,5 +176,10 @@
     "ignored": "ignored",
     "remaining": "remaining",
     "habits": "habits"
+  },
+  "profile": {
+    "displayName": "Display name",
+    "save": "Save",
+    "saved": "Saved!"
   }
 }
