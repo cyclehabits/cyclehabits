@@ -16,7 +16,7 @@ export function PageHeader({ date }: PageHeaderProps) {
   const isToday = date.toDateString() === new Date().toDateString()
 
   const label = isToday
-    ? t('nav.today')
+    ? t('dashboard.today')
     : `${weekdays[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]}`
 
   const firstName = user?.displayName?.split(' ')[0] ?? ''

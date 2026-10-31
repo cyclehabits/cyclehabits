@@ -150,6 +150,7 @@
     "noHabits": "No hay hábitos programados para este día.",
     "loading": "Cargando…",
     "progress": "Progreso del día",
-    "congrats": "🎉 ¡Todos los hábitos completados!"
+    "congrats": "🎉 ¡Todos los hábitos completados!",
+    "today": "Hoy"
   }
 }
