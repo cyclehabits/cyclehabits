@@ -182,3 +182,12 @@
     border-right-color: var(--border);
   }
 }
+
+/* ── Desktop layout (>= 1024px) ──────────────────────────────────── */
+@media (min-width: 1024px) {
+  .app-content {
+    margin-left: 240px;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}

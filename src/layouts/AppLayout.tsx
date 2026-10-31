@@ -1,3 +1,4 @@
+import '@/App.css'
 import { useEffect, useState } from 'react'
 import { Button } from '@awakr/awake-ui/button'
 import { BottomNav } from '@/components/nav/BottomNav'
@@ -44,7 +45,9 @@ export default function AppLayout() {
   return (
     <>
       <InstallButton />
-      <Outlet />
+      <main className="app-content">
+        <Outlet />
+      </main>
       <BottomNav />
     </>
   )

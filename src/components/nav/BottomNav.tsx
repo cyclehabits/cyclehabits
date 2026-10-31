@@ -7,6 +7,7 @@ export function BottomNav() {
 
   return (
     <nav className="bottom-nav">
+      <div className="nav-brand">CycleHabits</div>
       <NavLink to="/dashboard" className={({ isActive }) => `nav-item${isActive ? ' nav-item--active' : ''}`}>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
@@ -22,9 +23,10 @@ export function BottomNav() {
       </NavLink>
 
       <NavLink to="/habits" className="nav-fab" aria-label={t('nav.habits')}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
           <path d="M12 5v14M5 12h14"/>
         </svg>
+        <span className="nav-fab__label">{t('nav.habits')}</span>
       </NavLink>
 
       <NavLink to="/stats" className={({ isActive }) => `nav-item${isActive ? ' nav-item--active' : ''}`}>
