@@ -20,14 +20,27 @@ export function PageHeader({ date }: PageHeaderProps) {
     : `${weekdays[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]}`
 
   const firstName = user?.displayName?.split(' ')[0] ?? ''
+  const initial = firstName ? firstName[0].toUpperCase() : '?'
 
   return (
     <header className="page-header">
-      <div>
-        <h1 className="page-header__title">{label}</h1>
-        {isToday && (
-          <p className="page-header__sub">{t('dashboard.greeting', { name: firstName })}</p>
-        )}
+      <div className="page-header__content">
+        <div>
+          <p className="page-header__greeting">{t('dashboard.greeting', { name: firstName })}</p>
+          <h1 className="page-header__title">{label}</h1>
+        </div>
+        <button className="page-header__avatar" type="button" aria-label="Perfil">
+          {user?.photoURL ? (
+            <img
+              src={user.photoURL}
+              alt={firstName}
+              className="page-header__avatar-img"
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <span className="page-header__avatar-fallback">{initial}</span>
+          )}
+        </button>
       </div>
     </header>
   )
