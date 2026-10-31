@@ -100,3 +100,63 @@
   justify-content: space-between;
   margin-bottom: 0.5rem;
 }
+
+/* ── Chips de categoria ──────────────────────────────────────────────────── */
+
+.habit-form__category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.habit-form__category-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1.5px solid var(--color-awake-border);
+  background: transparent;
+  color: var(--color-awake-text-muted);
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+  white-space: nowrap;
+}
+
+.habit-form__category-chip:hover {
+  background: var(--color-awake-surface-raised);
+}
+
+/* Ativo por categoria */
+.habit-form__category-chip--saude.habit-form__category-chip--active {
+  background: var(--coral-light);
+  border-color: var(--coral);
+  color: var(--coral);
+}
+
+.habit-form__category-chip--energia.habit-form__category-chip--active {
+  background: var(--amber-light);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.habit-form__category-chip--mindful.habit-form__category-chip--active {
+  background: var(--violet-light);
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
+.habit-form__category-chip--conhecimento.habit-form__category-chip--active {
+  background: var(--petrol-subtle);
+  border-color: var(--petrol);
+  color: var(--petrol);
+}
+
+.habit-form__category-chip--outra.habit-form__category-chip--active {
+  background: var(--emerald-light);
+  border-color: var(--emerald);
+  color: var(--emerald);
+}

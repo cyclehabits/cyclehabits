@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { collection, addDoc } from 'firebase/firestore'
 import { db } from '@/lib/firestore'
 import { useAuth } from '@/contexts/auth/useAuth'
-import type { Frequency } from '@/types/habit'
+import type { Frequency, HabitCategory } from '@/types/habit'
 
 interface CreateHabitInput {
   name: string
@@ -11,6 +11,7 @@ interface CreateHabitInput {
   startTime?: string
   endTime?: string
   expiresAt?: string
+  category?: HabitCategory
 }
 
 function stripUndefined<T extends object>(obj: T): Partial<T> {

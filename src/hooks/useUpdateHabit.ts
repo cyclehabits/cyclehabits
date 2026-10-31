@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { doc, updateDoc, deleteField } from 'firebase/firestore'
 import { db } from '@/lib/firestore'
 import { useAuth } from '@/contexts/auth/useAuth'
-import type { Frequency } from '@/types/habit'
+import type { Frequency, HabitCategory } from '@/types/habit'
 
 interface UpdateHabitInput {
   habitId: string
@@ -12,6 +12,7 @@ interface UpdateHabitInput {
   startTime?: string
   endTime?: string
   expiresAt?: string
+  category?: HabitCategory
 }
 
 export function useUpdateHabit() {
@@ -19,7 +20,7 @@ export function useUpdateHabit() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ habitId, name, description, frequency, startTime, endTime, expiresAt }: UpdateHabitInput) => {
+    mutationFn: async ({ habitId, name, description, frequency, startTime, endTime, expiresAt, category }: UpdateHabitInput) => {
       if (!user) throw new Error('Não autenticado')
       await updateDoc(doc(db, 'users', user.uid, 'habits', habitId), {
         name,
@@ -28,6 +29,7 @@ export function useUpdateHabit() {
         startTime: startTime ?? deleteField(),
         endTime: endTime ?? deleteField(),
         expiresAt: expiresAt ?? deleteField(),
+        category: category ?? deleteField(),
       })
     },
     onSuccess: () => {

@@ -34,7 +34,8 @@
       "duration": "Expiration",
       "durationDay": "Day(s)",
       "durationMonth": "Month(s)",
-      "durationYear": "Year(s)"
+      "durationYear": "Year(s)",
+      "category": "Category"
     },
     "edit": "Edit habit",
     "editScope": {

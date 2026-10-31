@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@awakr/awake-ui/button'
 import { Field } from '@awakr/awake-ui/field'
 import { Switch } from '@awakr/awake-ui/switch'
-import type { Frequency } from '@/types/habit'
+import type { Frequency, HabitCategory } from '@/types/habit'
 import './HabitForm.css'
 
 export interface HabitFormValues {
@@ -13,6 +13,7 @@ export interface HabitFormValues {
   startTime?: string
   endTime?: string
   expiresAt?: string
+  category?: HabitCategory
 }
 
 interface HabitFormProps {
@@ -25,6 +26,14 @@ interface HabitFormProps {
 
 type FreqType = 'once' | 'daily' | 'weekly' | 'monthly' | 'every'
 type DurationUnit = 'day' | 'month' | 'year'
+
+const CATEGORY_CHIPS: { value: HabitCategory; label: string; emoji: string }[] = [
+  { value: 'saude',        label: 'Saúde',        emoji: '❤️' },
+  { value: 'energia',      label: 'Energia',       emoji: '⚡' },
+  { value: 'mindful',      label: 'Mindful',       emoji: '🧘' },
+  { value: 'conhecimento', label: 'Conhecimento',  emoji: '📚' },
+  { value: 'outra',        label: 'Outra',         emoji: '✦'  },
+]
 
 function calcExpiresAt(value: number, unit: DurationUnit): string {
   const d = new Date()
@@ -49,6 +58,7 @@ export function HabitForm({
 
   const [name, setName] = useState(initialValues?.name ?? '')
   const [description, setDescription] = useState(initialValues?.description ?? '')
+  const [category, setCategory] = useState<HabitCategory>(initialValues?.category ?? 'outra')
   const [freqType, setFreqType] = useState<FreqType>(initFreqType)
   const [weekDays, setWeekDays] = useState<number[]>(
     initFreq?.type === 'weekly' ? initFreq.days : [],
@@ -95,6 +105,7 @@ export function HabitForm({
       startTime: startTime || undefined,
       endTime: endTime || undefined,
       expiresAt,
+      category,
     })
   }
 
@@ -118,6 +129,25 @@ export function HabitForm({
           required
         />
       </Field.Root>
+
+      <div className="habit-form__field">
+        <label className="habit-form__label">{t('habits.form.category')}</label>
+        <div className="habit-form__category-chips">
+          {CATEGORY_CHIPS.map(c => (
+            <button
+              key={c.value}
+              type="button"
+              className={`habit-form__category-chip habit-form__category-chip--${c.value}${
+                category === c.value ? ' habit-form__category-chip--active' : ''
+              }`}
+              onClick={() => setCategory(c.value)}
+            >
+              <span aria-hidden="true">{c.emoji}</span>
+              {c.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <Field.Root>
         <Field.Label>{t('habits.form.description')}</Field.Label>

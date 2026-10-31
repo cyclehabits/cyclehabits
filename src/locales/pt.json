@@ -34,7 +34,8 @@
       "duration": "Expiração",
       "durationDay": "Dia(s)",
       "durationMonth": "Mês(es)",
-      "durationYear": "Ano(s)"
+      "durationYear": "Ano(s)",
+      "category": "Categoria"
     },
     "edit": "Editar hábito",
     "editScope": {
