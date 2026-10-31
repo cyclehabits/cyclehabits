@@ -98,28 +98,30 @@ const SWIPE_THRESHOLD = 60
 const MOVE_THRESHOLD  = 8
 
 function useSwipe(onSwipeLeft: () => void, onClose: () => void) {
-  const startX = useRef<number | null>(null)
-  const startY = useRef<number | null>(null)
-  const moved  = useRef(false)
+  const startX     = useRef<number | null>(null)
+  const startY     = useRef<number | null>(null)
+  const moved      = useRef(false)
+  const fromButton = useRef(false)
 
-  function onPointerDown(e: React.PointerEvent) {
-    const target = e.target as HTMLElement
-    if (target.closest('.habit-card__action-btn, .habit-card__check, .habit-card__footer button')) return
+  function onPointerDownCapture(e: React.PointerEvent) {
+    fromButton.current = !!(e.target as HTMLElement).closest('button')
+    if (fromButton.current) return
     startX.current = e.clientX
     startY.current = e.clientY
     moved.current  = false
-    e.currentTarget.setPointerCapture(e.pointerId)
   }
 
-  function onPointerMove(e: React.PointerEvent) {
-    if (startX.current === null) return
+  function onPointerMoveCapture(e: React.PointerEvent) {
+    if (fromButton.current || startX.current === null) return
     const dx = Math.abs(e.clientX - startX.current)
     const dy = Math.abs(e.clientY - (startY.current ?? e.clientY))
     if (dx > MOVE_THRESHOLD && dx > dy) moved.current = true
   }
 
-  function onPointerUp(e: React.PointerEvent) {
-    if (startX.current === null || !moved.current) {
+  function onPointerUpCapture(e: React.PointerEvent) {
+    const wasButton = fromButton.current
+    fromButton.current = false
+    if (wasButton || startX.current === null || !moved.current) {
       startX.current = null
       return
     }
@@ -130,7 +132,7 @@ function useSwipe(onSwipeLeft: () => void, onClose: () => void) {
     moved.current  = false
   }
 
-  return { onPointerDown, onPointerMove, onPointerUp }
+  return { onPointerDownCapture, onPointerMoveCapture, onPointerUpCapture }
 }
 
 // ── Componente principal ──────────────────────────────────────────────────────
