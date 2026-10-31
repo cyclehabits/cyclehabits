@@ -18,6 +18,8 @@
     "add": "Novo hábito",
     "empty": "Nenhum hábito cadastrado.",
     "archive": "Arquivar",
+    "done": "Feito",
+    "ignore": "Ignorar",
     "form": {
       "name": "Nome",
       "namePlaceholder": "Ex: Beber água",
@@ -34,10 +36,12 @@
       "every": "A cada",
       "everyDays": "dias",
       "once": "Único",
-      "time": "Horário (opcional)",
-      "duration": "Duração (opcional)",
-      "durationNone": "Sem duração",
-      "durationMin": "min"
+      "startTime": "Início (opcional)",
+      "endTime": "Fim (opcional)",
+      "duration": "Expiração",
+      "durationDay": "Dia(s)",
+      "durationMonth": "Mês(es)",
+      "durationYear": "Ano(s)"
     },
     "edit": "Editar hábito",
     "editScope": {
@@ -99,53 +103,11 @@
     "error_forgot_sent": "E-mail de redefinição enviado."
   },
   "months": {
-    "short": [
-      "jan",
-      "fev",
-      "mar",
-      "abr",
-      "mai",
-      "jun",
-      "jul",
-      "ago",
-      "set",
-      "out",
-      "nov",
-      "dez"
-    ],
-    "long": [
-      "Janeiro",
-      "Fevereiro",
-      "Março",
-      "Abril",
-      "Maio",
-      "Junho",
-      "Julho",
-      "Agosto",
-      "Setembro",
-      "Outubro",
-      "Novembro",
-      "Dezembro"
-    ]
+    "short": ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"],
+    "long": ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"]
   },
   "weekdays": {
-    "short": [
-      "Dom",
-      "Seg",
-      "Ter",
-      "Qua",
-      "Qui",
-      "Sex",
-      "Sáb"
-    ],
-    "long": [
-      "Domingo",
-      "Segunda",
-      "Terça",
-      "Quarta",
-      "Quinta",
-      "Sexta",
-      "Sábado"
-    ]
+    "short": ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],
+    "long": ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"]
   }
 }

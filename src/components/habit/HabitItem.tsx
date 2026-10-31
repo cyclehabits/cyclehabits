@@ -14,12 +14,6 @@ interface HabitItemProps {
   onUpdate: (habitId: string, status: HabitStatus) => void
 }
 
-const STATUS_CYCLE: Record<HabitStatus, HabitStatus> = {
-  pending: 'done',
-  done: 'ignored',
-  ignored: 'pending',
-}
-
 const STATUS_ICON: Record<HabitStatus, string> = {
   pending: '○',
   done: '✓',
@@ -34,11 +28,14 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
   const status: HabitStatus = log?.status ?? 'pending'
   const displayName = override?.name ?? habit.name
   const displayDesc = override?.description ?? habit.description
-  const displayTime = override?.time ?? habit.time
+  const displayStartTime = override?.startTime ?? habit.startTime
+  const displayEndTime = override?.endTime ?? habit.endTime
 
-  function handleCheck() {
-    onUpdate(habit.id, STATUS_CYCLE[status])
-  }
+  const timeLabel = displayStartTime
+    ? displayEndTime
+      ? `${displayStartTime} – ${displayEndTime}`
+      : displayStartTime
+    : null
 
   function handleEditClick() {
     if (!isRecurring(habit)) {
@@ -58,32 +55,57 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
     navigate(`/habits?edit=${habit.id}`)
   }
 
+  function handleDone() {
+    onUpdate(habit.id, status === 'done' ? 'pending' : 'done')
+  }
+
+  function handleIgnore() {
+    onUpdate(habit.id, status === 'ignored' ? 'pending' : 'ignored')
+  }
+
   return (
     <>
       <li className={`habit-item habit-item--${status}`}>
-        <button
-          className="habit-item__check"
-          onClick={handleCheck}
-          aria-label={`${displayName}: ${status}`}
-        >
+        <div className="habit-item__status">
           {STATUS_ICON[status]}
-        </button>
+        </div>
+
         <div className="habit-item__body">
           <span className="habit-item__name">{displayName}</span>
           {displayDesc && (
             <span className="habit-item__desc">{displayDesc}</span>
           )}
-          {displayTime && (
-            <span className="habit-item__time">{displayTime}</span>
+          {timeLabel && (
+            <span className="habit-item__time">{timeLabel}</span>
           )}
         </div>
-        <button
-          className="habit-item__edit"
-          onClick={handleEditClick}
-          aria-label={t('habits.edit')}
-        >
-          ✎
-        </button>
+
+        <div className="habit-item__actions">
+          <button
+            className={`habit-item__btn habit-item__btn--done${status === 'done' ? ' habit-item__btn--active' : ''}`}
+            onClick={handleDone}
+            aria-label={t('habits.done')}
+            title={t('habits.done')}
+          >
+            ✓
+          </button>
+          <button
+            className={`habit-item__btn habit-item__btn--ignore${status === 'ignored' ? ' habit-item__btn--active' : ''}`}
+            onClick={handleIgnore}
+            aria-label={t('habits.ignore')}
+            title={t('habits.ignore')}
+          >
+            –
+          </button>
+          <button
+            className="habit-item__edit"
+            onClick={handleEditClick}
+            aria-label={t('habits.edit')}
+            title={t('habits.edit')}
+          >
+            ✎
+          </button>
+        </div>
       </li>
 
       {showScopeModal && (

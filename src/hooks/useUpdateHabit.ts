@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { doc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc, deleteField } from 'firebase/firestore'
 import { db } from '@/lib/firestore'
 import { useAuth } from '@/contexts/auth/useAuth'
 import type { Frequency } from '@/types/habit'
@@ -9,8 +9,9 @@ interface UpdateHabitInput {
   name: string
   description?: string
   frequency: Frequency
-  time?: string
-  duration?: number
+  startTime?: string
+  endTime?: string
+  expiresAt?: string
 }
 
 export function useUpdateHabit() {
@@ -18,9 +19,16 @@ export function useUpdateHabit() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ habitId, ...fields }: UpdateHabitInput) => {
+    mutationFn: async ({ habitId, name, description, frequency, startTime, endTime, expiresAt }: UpdateHabitInput) => {
       if (!user) throw new Error('Não autenticado')
-      await updateDoc(doc(db, 'users', user.uid, 'habits', habitId), fields)
+      await updateDoc(doc(db, 'users', user.uid, 'habits', habitId), {
+        name,
+        frequency,
+        description: description ?? deleteField(),
+        startTime: startTime ?? deleteField(),
+        endTime: endTime ?? deleteField(),
+        expiresAt: expiresAt ?? deleteField(),
+      })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['habits', user?.uid] })

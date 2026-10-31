@@ -34,34 +34,35 @@ export default function HabitsPage() {
         name: existingOverride?.name ?? habitToEdit.name,
         description: existingOverride?.description ?? habitToEdit.description,
         frequency: habitToEdit.frequency,
-        time: existingOverride?.time ?? habitToEdit.time,
-        duration: existingOverride?.duration ?? habitToEdit.duration,
+        startTime: existingOverride?.startTime ?? habitToEdit.startTime,
+        endTime: existingOverride?.endTime ?? habitToEdit.endTime,
       }
     : undefined
 
+  function goToToday() {
+    navigate('/today', { replace: true })
+  }
+
   function handleSubmit(data: HabitFormValues) {
     if (habitToEdit && editDate) {
-      // Edição de ocorrência isolada → salva override
       upsertOverride(
         {
           habitId: habitToEdit.id,
           date: editDate,
           name: data.name,
           description: data.description,
-          time: data.time,
-          duration: data.duration,
+          startTime: data.startTime,
+          endTime: data.endTime,
         },
-        { onSuccess: () => navigate(-1) },
+        { onSuccess: goToToday },
       )
     } else if (habitToEdit) {
-      // Edição de todos os eventos → atualiza o habit
       updateHabit(
         { habitId: habitToEdit.id, ...data },
-        { onSuccess: () => navigate(-1) },
+        { onSuccess: goToToday },
       )
     } else {
-      // Criação
-      createHabit(data, { onSuccess: () => navigate(-1) })
+      createHabit(data, { onSuccess: goToToday })
     }
   }
 
@@ -81,7 +82,7 @@ export default function HabitsPage() {
             initialValues={initialValues}
             hideFrequency={!!editDate}
             onSubmit={handleSubmit}
-            onCancel={() => navigate(-1)}
+            onCancel={goToToday}
             loading={creating || updating || upserting}
           />
         </div>

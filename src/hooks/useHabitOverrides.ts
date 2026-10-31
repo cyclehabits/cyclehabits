@@ -9,7 +9,7 @@ export function useHabitOverrides(date: string) {
 
   return useQuery({
     queryKey: ['habitOverrides', user?.uid, date],
-    enabled: !!user,
+    enabled: !!user && !!date,
     queryFn: async () => {
       const q = query(
         collection(db, 'users', user!.uid, 'habitOverrides'),

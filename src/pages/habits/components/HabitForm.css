@@ -62,3 +62,41 @@
   @apply text-sm;
   color: var(--color-awake-text-muted);
 }
+
+.habit-form__time-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.habit-form__field--half {
+  flex: 1;
+  min-width: 0;
+}
+
+.habit-form__duration-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.habit-form__duration-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  color: var(--color-awake-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.habit-form__duration-value {
+  width: 5rem;
+}
+
+.habit-form__duration-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}

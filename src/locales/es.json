@@ -18,6 +18,8 @@
     "add": "Nuevo hábito",
     "empty": "No hay hábitos registrados.",
     "archive": "Archivar",
+    "done": "Hecho",
+    "ignore": "Ignorar",
     "form": {
       "name": "Nombre",
       "namePlaceholder": "Ej: Beber agua",
@@ -34,10 +36,12 @@
       "every": "Cada",
       "everyDays": "días",
       "once": "Único",
-      "time": "Horario (opcional)",
-      "duration": "Duración (opcional)",
-      "durationNone": "Sin duración",
-      "durationMin": "min"
+      "startTime": "Inicio (opcional)",
+      "endTime": "Fin (opcional)",
+      "duration": "Expiración",
+      "durationDay": "Día(s)",
+      "durationMonth": "Mes(es)",
+      "durationYear": "Año(s)"
     },
     "edit": "Editar hábito",
     "editScope": {

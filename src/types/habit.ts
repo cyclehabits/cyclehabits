@@ -13,8 +13,9 @@ export interface Habit {
   name: string
   description?: string
   frequency: Frequency
-  time?: string          // "HH:MM"
-  duration?: number      // minutos
+  startTime?: string     // "HH:MM"
+  endTime?: string       // "HH:MM"
+  expiresAt?: string     // "YYYY-MM-DD" — hábito para de aparecer após esta data
   createdAt: string
   archivedAt?: string
 }
@@ -22,11 +23,11 @@ export interface Habit {
 export interface HabitOverride {
   id: string
   habitId: string
-  date: string           // YYYY-MM-DD — identifica a ocorrência
+  date: string           // YYYY-MM-DD
   name?: string
   description?: string
-  time?: string
-  duration?: number
+  startTime?: string
+  endTime?: string
 }
 
 export interface HabitLog {

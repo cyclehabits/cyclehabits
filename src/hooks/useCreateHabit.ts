@@ -8,8 +8,15 @@ interface CreateHabitInput {
   name: string
   description?: string
   frequency: Frequency
-  time?: string
-  duration?: number
+  startTime?: string
+  endTime?: string
+  expiresAt?: string
+}
+
+function stripUndefined<T extends object>(obj: T): Partial<T> {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, v]) => v !== undefined),
+  ) as Partial<T>
 }
 
 export function useCreateHabit() {
@@ -20,7 +27,7 @@ export function useCreateHabit() {
     mutationFn: async (input: CreateHabitInput) => {
       if (!user) throw new Error('Não autenticado')
       await addDoc(collection(db, 'users', user.uid, 'habits'), {
-        ...input,
+        ...stripUndefined(input),
         userId: user.uid,
         createdAt: new Date().toISOString(),
         archivedAt: null,
