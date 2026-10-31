@@ -1,123 +1,260 @@
 @reference "tailwindcss";
 
-.habit-item {
-  @apply flex items-center gap-3 py-3 px-4 rounded-xl transition-opacity;
+/* ── Card base ────────────────────────────────────────────────────────────── */
+
+.habit-card {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 0 12px;
+  padding: 14px 14px 12px;
+  border-radius: 16px;
   background: var(--color-awake-surface);
-  border: 1px solid var(--color-awake-border);
+  box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.04);
+  transition: box-shadow .15s;
+  position: relative;
 }
 
-.habit-item--ignored {
-  opacity: 0.45;
+.habit-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,.10), 0 0 0 1px rgba(0,0,0,.06);
 }
 
-.habit-item--done .habit-item__name {
+.habit-card--ignored {
+  opacity: 0.5;
+}
+
+/* ── Ícone de categoria ───────────────────────────────────────────────────── */
+
+.habit-card__icon {
+  grid-row: 1 / 3;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  /* cor padrão — sobrescrita por modificador de categoria */
+  background: var(--petrol-subtle);
+  color: var(--petrol);
+}
+
+.habit-card--saude        .habit-card__icon { background: var(--coral-light);   color: var(--coral);   }
+.habit-card--energia      .habit-card__icon { background: var(--amber-light);   color: var(--amber);   }
+.habit-card--mindful      .habit-card__icon { background: var(--violet-light);  color: var(--violet);  }
+.habit-card--conhecimento .habit-card__icon { background: var(--petrol-subtle); color: var(--petrol);  }
+.habit-card--outra        .habit-card__icon { background: var(--emerald-light); color: var(--emerald); }
+
+/* done: ícone vira petrol */
+.habit-card--done .habit-card__icon {
+  background: var(--petrol-subtle);
+  color: var(--petrol);
+}
+
+/* ── Corpo ────────────────────────────────────────────────────────────────── */
+
+.habit-card__body {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.habit-card__name {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--fg-page);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.habit-card--done .habit-card__name {
   text-decoration: line-through;
   color: var(--color-awake-text-muted);
 }
 
-/* Status indicator (left icon) */
-.habit-item__status {
-  flex-shrink: 0;
-  width: 1.5rem;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: bold;
+.habit-card__time {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
   color: var(--color-awake-text-muted);
 }
 
-.habit-item--done .habit-item__status {
+.habit-card__badge {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  width: fit-content;
+  margin-top: 2px;
+  background: var(--petrol-subtle);
   color: var(--petrol);
 }
 
-/* Body */
-.habit-item__body {
-  @apply flex flex-col gap-0.5 min-w-0 flex-1;
-}
+.habit-card--saude        .habit-card__badge { background: var(--coral-light);   color: var(--coral);   }
+.habit-card--energia      .habit-card__badge { background: var(--amber-light);   color: var(--amber);   }
+.habit-card--mindful      .habit-card__badge { background: var(--violet-light);  color: var(--violet);  }
+.habit-card--conhecimento .habit-card__badge { background: var(--petrol-subtle); color: var(--petrol);  }
+.habit-card--outra        .habit-card__badge { background: var(--emerald-light); color: var(--emerald); }
 
-.habit-item__name {
-  @apply text-sm font-medium truncate;
-  color: var(--color-awake-text);
-}
+/* ── Área direita (check + menu) ─────────────────────────────────────────── */
 
-.habit-item__desc {
-  @apply text-xs truncate;
-  color: var(--color-awake-text-muted);
-}
-
-.habit-item__time {
-  font-size: 0.75rem;
-  color: var(--color-awake-text-muted);
-}
-
-/* Action buttons group */
-.habit-item__actions {
+.habit-card__right {
+  grid-column: 3;
+  grid-row: 1;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  flex-shrink: 0;
+  gap: 4px;
 }
 
-.habit-item__btn,
-.habit-item__edit {
+/* Botão de check */
+.habit-card__check {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--color-awake-border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-awake-text-muted);
+  transition: border-color .15s, background .15s, color .15s;
+}
+
+.habit-card__check:hover {
+  border-color: var(--petrol);
+  color: var(--petrol);
+  background: var(--petrol-subtle);
+}
+
+.habit-card__check--done {
+  border-color: var(--petrol);
+  background: var(--petrol);
+  color: #fff;
+}
+
+.habit-card__check--done:hover {
+  background: var(--petrol-hover);
+  border-color: var(--petrol-hover);
+}
+
+.habit-card__check--ignored {
+  border-color: var(--color-awake-border);
+  background: var(--color-awake-surface-raised);
+  color: var(--color-awake-text-muted);
+}
+
+/* Menu ⋯ */
+.habit-card__menu-wrap {
+  position: relative;
+}
+
+.habit-card__menu-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: var(--color-awake-text-muted);
+  opacity: 0;
+  transition: opacity .15s, background .15s;
+}
+
+.habit-card:hover .habit-card__menu-btn,
+.habit-card__menu-btn:focus-visible {
+  opacity: 1;
+}
+
+.habit-card__menu-btn:hover {
+  background: var(--color-awake-surface-raised);
+  color: var(--fg-page);
+}
+
+.habit-card__menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  background: var(--color-awake-surface);
+  border: 1px solid var(--color-awake-border);
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12);
+  min-width: 160px;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.habit-card__menu-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0.3rem 0.45rem;
-  border-radius: 0.375rem;
   font-size: 0.85rem;
-  font-weight: bold;
-  transition: color 0.15s, background 0.15s, opacity 0.15s;
-  line-height: 1;
+  color: var(--fg-page);
+  text-align: left;
+  transition: background .12s;
 }
 
-/* Done button */
-.habit-item__btn--done {
-  color: var(--color-awake-text-subtle);
-  opacity: 0.5;
+.habit-card__menu-dropdown button:hover {
+  background: var(--color-awake-surface-raised);
 }
 
-.habit-item__btn--done:hover,
-.habit-item__btn--done:focus-visible {
-  opacity: 1;
+.habit-card__menu-delete {
+  color: var(--coral) !important;
+}
+
+.habit-card__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+}
+
+/* ── Rodapé de status ─────────────────────────────────────────────────────── */
+
+.habit-card__footer {
+  grid-column: 2 / 4;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-awake-border);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+}
+
+.habit-card__footer--done {
   color: var(--petrol);
-  background: color-mix(in srgb, var(--petrol) 12%, transparent);
 }
 
-.habit-item__btn--done.habit-item__btn--active {
-  opacity: 1;
+.habit-card__footer--ignored {
+  color: var(--color-awake-text-muted);
+}
+
+.habit-card__footer button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--petrol);
-  background: color-mix(in srgb, var(--petrol) 15%, transparent);
+  padding: 0;
 }
 
-/* Ignore button */
-.habit-item__btn--ignore {
-  color: var(--color-awake-text-subtle);
-  opacity: 0.5;
-}
-
-.habit-item__btn--ignore:hover,
-.habit-item__btn--ignore:focus-visible {
-  opacity: 1;
-  color: var(--color-awake-text-muted);
-  background: var(--color-awake-surface-raised);
-}
-
-.habit-item__btn--ignore.habit-item__btn--active {
-  opacity: 1;
-  color: var(--color-awake-text-muted);
-  background: var(--color-awake-surface-raised);
-}
-
-/* Edit button */
-.habit-item__edit {
-  color: var(--color-awake-text-subtle);
-  opacity: 0.4;
-  font-size: 1rem;
-}
-
-.habit-item:hover .habit-item__edit,
-.habit-item__edit:focus-visible {
-  opacity: 1;
-  color: var(--color-awake-text);
-  background: var(--color-awake-surface-raised);
+.habit-card__footer button:hover {
+  text-decoration: underline;
 }
