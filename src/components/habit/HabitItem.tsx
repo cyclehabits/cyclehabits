@@ -93,25 +93,41 @@ function derivePeriod(startTime?: string): string {
 // ── Swipe hook ────────────────────────────────────────────────────────────────
 
 const SWIPE_THRESHOLD = 60
+const MOVE_THRESHOLD = 8 // mínimo pra considerar que foi um arrasto
 
 function useSwipe(onSwipeLeft: () => void, onClose: () => void) {
   const startX = useRef<number | null>(null)
-  const isDragging = useRef(false)
+  const startY = useRef<number | null>(null)
+  const moved = useRef(false)
 
   function onPointerDown(e: React.PointerEvent) {
     startX.current = e.clientX
-    isDragging.current = false
+    startY.current = e.clientY
+    moved.current = false
+  }
+
+  function onPointerMove(e: React.PointerEvent) {
+    if (startX.current === null) return
+    const dx = Math.abs(e.clientX - startX.current)
+    const dy = Math.abs(e.clientY - (startY.current ?? e.clientY))
+    if (dx > MOVE_THRESHOLD && dx > dy) {
+      moved.current = true
+    }
   }
 
   function onPointerUp(e: React.PointerEvent) {
-    if (startX.current === null) return
+    if (startX.current === null || !moved.current) {
+      startX.current = null
+      return
+    }
     const delta = startX.current - e.clientX
     if (delta > SWIPE_THRESHOLD) onSwipeLeft()
     else if (delta < -SWIPE_THRESHOLD) onClose()
     startX.current = null
+    moved.current = false
   }
 
-  return { onPointerDown, onPointerUp }
+  return { onPointerDown, onPointerMove, onPointerUp }
 }
 
 // ── Componente principal ──────────────────────────────────────────────────────
@@ -180,6 +196,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
         <div
           className={`habit-card habit-card--${status} habit-card--${category}`}
           {...swipe}
+          style={{ touchAction: 'pan-y' }}
         >
           {/* Ícone de categoria */}
           <div className="habit-card__icon" aria-hidden>
