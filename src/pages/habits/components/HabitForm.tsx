@@ -268,6 +268,8 @@ export function HabitForm({
             }
             className="habit-form__duration-value"
           />
+        </div>
+        <div className="habit-form__duration-units">
           {(['day', 'month', 'year'] as DurationUnit[]).map(unit => (
             <button
               key={unit}
