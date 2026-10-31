@@ -34,7 +34,6 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  /* cor padrão — sobrescrita por modificador de categoria */
   background: var(--petrol-subtle);
   color: var(--petrol);
 }
@@ -45,7 +44,6 @@
 .habit-card--conhecimento .habit-card__icon { background: var(--petrol-subtle); color: var(--petrol);  }
 .habit-card--outra        .habit-card__icon { background: var(--emerald-light); color: var(--emerald); }
 
-/* done: ícone vira petrol */
 .habit-card--done .habit-card__icon {
   background: var(--petrol-subtle);
   color: var(--petrol);
@@ -107,7 +105,7 @@
   min-width: 0;
 }
 
-/* ── Área direita (check + menu) ─────────────────────────────────────────── */
+/* ── Área direita (check + opções) ──────────────────────────────────────── */
 
 .habit-card__right {
   display: flex;
@@ -153,12 +151,8 @@
   color: var(--color-awake-text-muted);
 }
 
-/* Menu ⋯ */
-.habit-card__menu-wrap {
-  position: relative;
-}
-
-.habit-card__menu-btn {
+/* Botão ⋮ de opções */
+.habit-card__more-btn {
   width: 28px;
   height: 28px;
   border: none;
@@ -169,54 +163,13 @@
   justify-content: center;
   border-radius: 6px;
   color: var(--color-awake-text-muted);
-  opacity: 0;
-  transition: opacity .15s, background .15s;
+  transition: background .15s, color .15s;
 }
 
-.habit-card:hover .habit-card__menu-btn,
-.habit-card__menu-btn:focus-visible {
-  opacity: 1;
-}
-
-.habit-card__menu-btn:hover {
+.habit-card__more-btn:hover,
+.habit-card__more-btn--active {
   background: var(--color-awake-surface-raised);
   color: var(--fg-page);
-}
-
-.habit-card__menu-dropdown {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 4px);
-  background: var(--color-awake-surface);
-  border: 1px solid var(--color-awake-border);
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0,0,0,.12);
-  min-width: 160px;
-  z-index: 50;
-  overflow: hidden;
-}
-
-.habit-card__menu-dropdown button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 10px 14px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 0.85rem;
-  color: var(--fg-page);
-  text-align: left;
-  transition: background .12s;
-}
-
-.habit-card__menu-dropdown button:hover {
-  background: var(--color-awake-surface-raised);
-}
-
-.habit-card__menu-delete {
-  color: var(--coral) !important;
 }
 
 .habit-card__overlay {
@@ -261,61 +214,55 @@
   text-decoration: underline;
 }
 
-/* ── Swipe wrapper ────────────────────────────────────────────────────────── */
+/* ── Card wrapper ─────────────────────────────────────────────────────────── */
 
 .habit-card-wrap {
-  position: relative;
-  overflow: hidden;
   border-radius: 16px;
+  position: relative;
+  z-index: 50;
 }
 
 .habit-card-wrap .habit-card {
-  position: relative;
-  z-index: 1;
-  transition: transform 0.25s ease;
   border-radius: 16px;
 }
 
-.habit-card-wrap--swiped .habit-card {
-  transform: translateX(-148px);
-}
+/* ── Ações expandidas abaixo do card ─────────────────────────────────────── */
 
-/* ── Botões revelados pelo swipe ─────────────────────────────────────────── */
-
-.habit-card__swipe-actions {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
+.habit-card__actions {
   display: flex;
-  align-items: stretch;
-  z-index: 0;
+  gap: 8px;
+  padding: 8px 4px 4px;
 }
 
-.habit-card__swipe-btn {
+.habit-card__actions-btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  width: 72px;
-  border: none;
+  gap: 6px;
+  padding: 10px 0;
+  border: 1.5px solid var(--color-awake-border);
+  border-radius: 10px;
+  background: var(--color-awake-surface);
   cursor: pointer;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.82rem;
+  font-weight: 600;
   font-family: var(--font-body);
-  flex-direction: column;
-  gap: 4px;
-}
-
-.habit-card__swipe-btn--edit {
-  background: var(--color-awake-surface-raised);
   color: var(--color-awake-text);
+  transition: background .12s, border-color .12s;
 }
 
-.habit-card__swipe-btn--delete {
-  background: var(--coral);
-  color: #fff;
-  border-radius: 0 16px 16px 0;
+.habit-card__actions-btn:hover {
+  background: var(--color-awake-surface-raised);
+}
+
+.habit-card__actions-btn--delete {
+  border-color: var(--coral);
+  color: var(--coral);
+}
+
+.habit-card__actions-btn--delete:hover {
+  background: var(--coral-light);
 }
 
 /* ── Botões de ação sempre visíveis ──────────────────────────────────────── */

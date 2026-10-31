@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { Habit, HabitLog, HabitStatus, HabitOverride, HabitCategory } from '@/types/habit'
@@ -90,57 +90,22 @@ function derivePeriod(startTime?: string): string {
   return 'Noite'
 }
 
-// ── Swipe hook ────────────────────────────────────────────────────────────────
-// Usa setPointerCapture para garantir que move/up sejam recebidos mesmo
-// quando o dedo sai da área de origem — padrão correto para drag interactions.
+// ── Ícone de opções ───────────────────────────────────────────────────────────
 
-const SWIPE_THRESHOLD = 60
-const MOVE_THRESHOLD  = 8
-
-function useSwipe(onSwipeLeft: () => void, onClose: () => void) {
-  const startX     = useRef<number | null>(null)
-  const startY     = useRef<number | null>(null)
-  const moved      = useRef(false)
-  const fromButton = useRef(false)
-
-  function onPointerDownCapture(e: React.PointerEvent) {
-    fromButton.current = !!(e.target as HTMLElement).closest('button')
-    if (fromButton.current) return
-    startX.current = e.clientX
-    startY.current = e.clientY
-    moved.current  = false
-  }
-
-  function onPointerMoveCapture(e: React.PointerEvent) {
-    if (fromButton.current || startX.current === null) return
-    const dx = Math.abs(e.clientX - startX.current)
-    const dy = Math.abs(e.clientY - (startY.current ?? e.clientY))
-    if (dx > MOVE_THRESHOLD && dx > dy) moved.current = true
-  }
-
-  function onPointerUpCapture(e: React.PointerEvent) {
-    const wasButton = fromButton.current
-    fromButton.current = false
-    if (wasButton || startX.current === null || !moved.current) {
-      startX.current = null
-      return
-    }
-    const delta = startX.current - e.clientX
-    if (delta > SWIPE_THRESHOLD) onSwipeLeft()
-    else if (delta < -SWIPE_THRESHOLD) onClose()
-    startX.current = null
-    moved.current  = false
-  }
-
-  return { onPointerDownCapture, onPointerMoveCapture, onPointerUpCapture }
-}
+const IconMore = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+    <circle cx="8" cy="3" r="1.2" fill="currentColor"/>
+    <circle cx="8" cy="8" r="1.2" fill="currentColor"/>
+    <circle cx="8" cy="13" r="1.2" fill="currentColor"/>
+  </svg>
+)
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
 export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [swiped, setSwiped] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
@@ -163,46 +128,22 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
     : null
 
   function handleEditClick() {
-    setSwiped(false)
+    setExpanded(false)
     if (!isRecurring(habit)) navigate(`/habits?edit=${habit.id}`)
     else setShowEditModal(true)
   }
 
   function handleDeleteClick() {
-    setSwiped(false)
+    setExpanded(false)
     if (!isRecurring(habit)) deleteHabit.mutate(habit.id)
     else setShowDeleteModal(true)
   }
 
-  const swipe = useSwipe(() => setSwiped(true), () => setSwiped(false))
-
   return (
     <>
-      <li className={`habit-card-wrap${swiped ? ' habit-card-wrap--swiped' : ''}`}>
-        {/* Ações reveladas pelo swipe */}
-        <div className="habit-card__swipe-actions" aria-hidden={!swiped}>
-          <button
-            className="habit-card__swipe-btn habit-card__swipe-btn--edit"
-            onClick={handleEditClick}
-            tabIndex={swiped ? 0 : -1}
-          >
-            ✏️ {t('habits.edit')}
-          </button>
-          <button
-            className="habit-card__swipe-btn habit-card__swipe-btn--delete"
-            onClick={handleDeleteClick}
-            tabIndex={swiped ? 0 : -1}
-          >
-            🗑️ {t('habits.delete')}
-          </button>
-        </div>
-
-        <div
-          className={`habit-card habit-card--${status} habit-card--${category}`}
-          {...swipe}
-          style={{ touchAction: 'pan-y' }}
-        >
-          {/* Área de arrasto: demarca visualmente onde o swipe é esperado */}
+      <li className="habit-card-wrap">
+        <div className={`habit-card habit-card--${status} habit-card--${category}`}>
+          {/* Ícone de categoria */}
           <div className="habit-card__swipe-area">
             <div className="habit-card__icon" aria-hidden>
               {meta.icon}
@@ -218,7 +159,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
             </div>
           </div>
 
-          {/* Botões de ação: isolados da área de swipe */}
+          {/* Botões de ação */}
           <div className="habit-card__right">
             {status === 'pending' && (
               <button
@@ -256,6 +197,16 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
                 <IconSkip />
               </button>
             )}
+
+            {/* Botão de opções */}
+            <button
+              className={`habit-card__more-btn${expanded ? ' habit-card__more-btn--active' : ''}`}
+              onClick={() => setExpanded(prev => !prev)}
+              aria-label={t('habits.options')}
+              aria-expanded={expanded}
+            >
+              <IconMore />
+            </button>
           </div>
 
           {/* Rodapé de status */}
@@ -266,8 +217,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
                   ? t('habits.doneAt', { time: completedAt })
                   : t('habits.doneFeedback')}
               </span>
-              <button 
-                onClick={() => onUpdate(habit.id, 'pending')} >
+              <button onClick={() => onUpdate(habit.id, 'pending')}>
                 {t('habits.undone')}
               </button>
             </div>
@@ -275,17 +225,28 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
           {status === 'ignored' && (
             <div className="habit-card__footer habit-card__footer--ignored">
               <span>{t('habits.ignoredFeedback')}</span>
-              <button 
-                onClick={() => onUpdate(habit.id, 'pending')}>
+              <button onClick={() => onUpdate(habit.id, 'pending')}>
                 {t('habits.revert')}
               </button>
             </div>
           )}
         </div>
+
+        {/* Ações expandidas abaixo do card */}
+        {expanded && (
+          <div className="habit-card__actions">
+            <button className="habit-card__actions-btn" onClick={handleEditClick}>
+              ✏️ {t('habits.edit')}
+            </button>
+            <button className="habit-card__actions-btn habit-card__actions-btn--delete" onClick={handleDeleteClick}>
+              🗑️ {t('habits.delete')}
+            </button>
+          </div>
+        )}
       </li>
 
-      {swiped && (
-        <div className="habit-card__overlay" onClick={() => setSwiped(false)} />
+      {expanded && (
+        <div className="habit-card__overlay" onClick={() => setExpanded(false)} />
       )}
 
       {showEditModal && (

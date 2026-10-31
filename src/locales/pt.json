@@ -52,6 +52,7 @@
     },
     "undone": "Desfazer",
     "revert": "Reverter",
+    "options": "Opções",
     "doneAt": "Concluído às {{time}}",
     "doneFeedback": "✓ Concluído",
     "ignoredFeedback": "Ignorado hoje",
