@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { db } from '@/lib/firestore'
 import { useAuth } from '@/contexts/auth/useAuth'
-import { updateUserProfile } from '@/lib/firestore/profile'
+import { updateUserProfile } from '@/lib/firebase/profile'
 import type { UserProfile } from '@/types/profile'
 
 export function useProfile() {

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
 import { onAuthStateChanged, signOut as firebaseSignOut, User } from 'firebase/auth'
 import { auth } from '@/lib/firebase/auth'
-import { getOrCreateProfile } from '@/lib/firestore/profile'
+import { getOrCreateProfile } from '@/lib/firebase/profile'
 
 interface AuthContextValue {
   user: User | null
