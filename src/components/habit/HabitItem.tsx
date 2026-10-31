@@ -91,24 +91,22 @@ function derivePeriod(startTime?: string): string {
 }
 
 // ── Swipe hook ────────────────────────────────────────────────────────────────
+// Usa setPointerCapture para garantir que move/up sejam recebidos mesmo
+// quando o dedo sai da área de origem — padrão correto para drag interactions.
 
 const SWIPE_THRESHOLD = 60
-const MOVE_THRESHOLD = 8
+const MOVE_THRESHOLD  = 8
 
-function useSwipe(
-  onSwipeLeft: () => void,
-  onClose: () => void,
-  swipeAreaRef: React.RefObject<HTMLDivElement | null>,
-) {
+function useSwipe(onSwipeLeft: () => void, onClose: () => void) {
   const startX = useRef<number | null>(null)
   const startY = useRef<number | null>(null)
   const moved  = useRef(false)
 
   function onPointerDown(e: React.PointerEvent) {
-    if (!swipeAreaRef.current?.contains(e.target as Node)) return
     startX.current = e.clientX
     startY.current = e.clientY
     moved.current  = false
+    e.currentTarget.setPointerCapture(e.pointerId)
   }
 
   function onPointerMove(e: React.PointerEvent) {
@@ -172,8 +170,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
     else setShowDeleteModal(true)
   }
 
-  const swipeAreaRef = useRef<HTMLDivElement>(null)
-  const swipe = useSwipe(() => setSwiped(true), () => setSwiped(false), swipeAreaRef)
+  const swipe = useSwipe(() => setSwiped(true), () => setSwiped(false))
 
   return (
     <>
@@ -196,14 +193,9 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
           </button>
         </div>
 
-        {/* Card principal — recebe os handlers para capturar arrasto em toda a área */}
-        <div
-          className={`habit-card habit-card--${status} habit-card--${category}`}
-          {...swipe}
-          style={{ touchAction: 'pan-y' }}
-        >
-          {/* Área de arrasto: ícone + corpo */}
-          <div className="habit-card__swipe-area" ref={swipeAreaRef}>
+        <div className={`habit-card habit-card--${status} habit-card--${category}`}>
+          {/* Área de arrasto: recebe os handlers + pointer capture */}
+          <div className="habit-card__swipe-area" {...swipe} style={{ touchAction: 'pan-y' }}>
             <div className="habit-card__icon" aria-hidden>
               {meta.icon}
             </div>
@@ -218,7 +210,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
             </div>
           </div>
 
-          {/* Botões de ação sempre visíveis */}
+          {/* Botões de ação: isolados da área de swipe */}
           <div className="habit-card__right">
             {status === 'pending' && (
               <button
