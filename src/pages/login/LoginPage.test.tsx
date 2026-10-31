@@ -46,7 +46,7 @@ describe('LoginPage', () => {
     expect(screen.getByRole('tab', { name: /cadastrar/i })).toBeInTheDocument()
   })
 
-  it('signs in with email and password and navigates to /today', async () => {
+  it('signs in with email and password and navigates to /dashboard', async () => {
     vi.mocked(firebaseAuth.signInWithEmailAndPassword).mockResolvedValueOnce({} as any)
     renderLoginPage()
 
@@ -64,7 +64,7 @@ describe('LoginPage', () => {
         'user@test.com',
         'senha123'
       )
-      expect(mockNavigate).toHaveBeenCalledWith('/today')
+      expect(mockNavigate).toHaveBeenCalledWith('/dashboard')
     })
   })
 
@@ -85,7 +85,7 @@ describe('LoginPage', () => {
     })
   })
 
-  it('signs in with Google and navigates to /today', async () => {
+  it('signs in with Google and navigates to /dashboard', async () => {
     vi.mocked(firebaseAuth.signInWithPopup).mockResolvedValueOnce({} as any)
     renderLoginPage()
 
@@ -93,7 +93,7 @@ describe('LoginPage', () => {
 
     await waitFor(() => {
       expect(firebaseAuth.signInWithPopup).toHaveBeenCalled()
-      expect(mockNavigate).toHaveBeenCalledWith('/today')
+      expect(mockNavigate).toHaveBeenCalledWith('/dashboard')
     })
   })
 

@@ -5,7 +5,7 @@ import PrivateRoute from './PrivateRoute'
 import { Loading } from '@awakr/awake-ui/loading'
 
 const LoginPage    = lazy(() => import('@/pages/login/LoginPage'))
-const TodayPage    = lazy(() => import('@/pages/today/TodayPage'))
+const DashboardPage    = lazy(() => import('@/pages/dashboard/DashboardPage'))
 const HabitsPage   = lazy(() => import('@/pages/habits/HabitsPage'))
 const HistoryPage  = lazy(() => import('@/pages/history/HistoryPage'))
 const StatsPage    = lazy(() => import('@/pages/stats/StatsPage'))
@@ -28,8 +28,8 @@ export default function Router() {
           <Route path="/login" element={<LoginPage />} />
           <Route element={<PrivateRoute />}>
             <Route element={<AppLayout />}>
-              <Route path="/" element={<Navigate to="/today" replace />} />
-              <Route path="/today" element={<TodayPage />} />
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/habits" element={<HabitsPage />} />
               <Route path="/history" element={<HistoryPage />} />
               <Route path="/stats" element={<StatsPage />} />

@@ -1,17 +1,10 @@
 {
   "nav": {
-    "today": "Today",
     "history": "History",
     "habits": "Habits",
     "stats": "Stats",
-    "profile": "Profile"
-  },
-  "today": {
-    "greeting": "Hello, {{name}} 👋",
-    "noHabits": "No habits scheduled for this day.",
-    "loading": "Loading…",
-    "progress": "Daily progress",
-    "congrats": "🎉 All habits completed!"
+    "profile": "Profile",
+    "dashboard": "Today"
   },
   "habits": {
     "title": "Habits",
@@ -151,5 +144,12 @@
       "Friday",
       "Saturday"
     ]
+  },
+  "dashboard": {
+    "greeting": "Hello, {{name}} 👋",
+    "noHabits": "No habits scheduled for this day.",
+    "loading": "Loading…",
+    "progress": "Daily progress",
+    "congrats": "🎉 All habits completed!"
   }
 }

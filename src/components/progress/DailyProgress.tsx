@@ -16,7 +16,7 @@ export function DailyProgress({ done, total }: DailyProgressProps) {
       <Progress.Root value={pct} className="daily-progress__root">
         <div className="daily-progress__header">
           <Progress.Label className="daily-progress__label">
-            {t('today.progress')}
+            {t('dashboard.progress')}
           </Progress.Label>
           <span className="daily-progress__count">{done}/{total}</span>
         </div>
@@ -25,7 +25,7 @@ export function DailyProgress({ done, total }: DailyProgressProps) {
         </Progress.Track>
       </Progress.Root>
       {pct === 100 && total > 0 && (
-        <p className="daily-progress__congrats">{t('today.congrats')}</p>
+        <p className="daily-progress__congrats">{t('dashboard.congrats')}</p>
       )}
     </div>
   )

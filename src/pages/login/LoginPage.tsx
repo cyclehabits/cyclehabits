@@ -56,7 +56,7 @@ export default function LoginPage() {
     setLoading(true)
     try {
       await signInWithEmailAndPassword(auth, email, password)
-      navigate('/today')
+      navigate('/dashboard')
     } catch {
       setError(t('login.error_invalid'))
     } finally {
@@ -70,7 +70,7 @@ export default function LoginPage() {
     setLoading(true)
     try {
       await createUserWithEmailAndPassword(auth, signUpEmail, signUpPassword)
-      navigate('/today')
+      navigate('/dashboard')
     } catch {
       setError(t('login.error_signup'))
     } finally {
@@ -83,7 +83,7 @@ export default function LoginPage() {
     setLoading(true)
     try {
       await signInWithPopup(auth, new GoogleAuthProvider())
-      navigate('/today')
+      navigate('/dashboard')
     } catch (err) {
       console.error('Google auth error:', err)
       setError(t('login.error_google'))

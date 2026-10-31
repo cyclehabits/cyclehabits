@@ -1,17 +1,10 @@
 {
   "nav": {
-    "today": "Hoy",
     "history": "Historial",
     "habits": "Hábitos",
     "stats": "Stats",
-    "profile": "Perfil"
-  },
-  "today": {
-    "greeting": "Hola, {{name}} 👋",
-    "noHabits": "No hay hábitos programados para este día.",
-    "loading": "Cargando…",
-    "progress": "Progreso del día",
-    "congrats": "🎉 ¡Todos los hábitos completados!"
+    "profile": "Perfil",
+    "dashboard": "Hoy"
   },
   "habits": {
     "title": "Hábitos",
@@ -151,5 +144,12 @@
       "Viernes",
       "Sábado"
     ]
+  },
+  "dashboard": {
+    "greeting": "Hola, {{name}} 👋",
+    "noHabits": "No hay hábitos programados para este día.",
+    "loading": "Cargando…",
+    "progress": "Progreso del día",
+    "congrats": "🎉 ¡Todos los hábitos completados!"
   }
 }

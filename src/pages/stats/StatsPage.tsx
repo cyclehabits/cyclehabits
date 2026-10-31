@@ -66,7 +66,7 @@ export default function StatsPage() {
           <>
             <div className="stats-overall">
               <span className="stats-overall__pct">{overallPct}%</span>
-              <span className="stats-overall__label">{t('today.progress')}</span>
+              <span className="stats-overall__label">{t('dashboard.progress')}</span>
             </div>
 
             <ul className="stats-list">

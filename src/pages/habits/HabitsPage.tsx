@@ -40,7 +40,7 @@ export default function HabitsPage() {
     : undefined
 
   function goToToday() {
-    navigate('/today', { replace: true })
+    navigate('/dashboard', { replace: true })
   }
 
   function handleSubmit(data: HabitFormValues) {
