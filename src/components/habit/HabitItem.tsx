@@ -93,26 +93,29 @@ function derivePeriod(startTime?: string): string {
 // ── Swipe hook ────────────────────────────────────────────────────────────────
 
 const SWIPE_THRESHOLD = 60
-const MOVE_THRESHOLD = 8 // mínimo pra considerar que foi um arrasto
+const MOVE_THRESHOLD = 8
 
-function useSwipe(onSwipeLeft: () => void, onClose: () => void) {
+function useSwipe(
+  onSwipeLeft: () => void,
+  onClose: () => void,
+  swipeAreaRef: React.RefObject<HTMLDivElement | null>,
+) {
   const startX = useRef<number | null>(null)
   const startY = useRef<number | null>(null)
-  const moved = useRef(false)
+  const moved  = useRef(false)
 
   function onPointerDown(e: React.PointerEvent) {
+    if (!swipeAreaRef.current?.contains(e.target as Node)) return
     startX.current = e.clientX
     startY.current = e.clientY
-    moved.current = false
+    moved.current  = false
   }
 
   function onPointerMove(e: React.PointerEvent) {
     if (startX.current === null) return
     const dx = Math.abs(e.clientX - startX.current)
     const dy = Math.abs(e.clientY - (startY.current ?? e.clientY))
-    if (dx > MOVE_THRESHOLD && dx > dy) {
-      moved.current = true
-    }
+    if (dx > MOVE_THRESHOLD && dx > dy) moved.current = true
   }
 
   function onPointerUp(e: React.PointerEvent) {
@@ -124,7 +127,7 @@ function useSwipe(onSwipeLeft: () => void, onClose: () => void) {
     if (delta > SWIPE_THRESHOLD) onSwipeLeft()
     else if (delta < -SWIPE_THRESHOLD) onClose()
     startX.current = null
-    moved.current = false
+    moved.current  = false
   }
 
   return { onPointerDown, onPointerMove, onPointerUp }
@@ -169,7 +172,8 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
     else setShowDeleteModal(true)
   }
 
-  const swipe = useSwipe(() => setSwiped(true), () => setSwiped(false))
+  const swipeAreaRef = useRef<HTMLDivElement>(null)
+  const swipe = useSwipe(() => setSwiped(true), () => setSwiped(false), swipeAreaRef)
 
   return (
     <>
@@ -192,18 +196,17 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
           </button>
         </div>
 
-        {/* Card principal */}
+        {/* Card principal — recebe os handlers para capturar arrasto em toda a área */}
         <div
           className={`habit-card habit-card--${status} habit-card--${category}`}
+          {...swipe}
+          style={{ touchAction: 'pan-y' }}
         >
-          {/* Área de swipe: ícone + corpo */}
-          <div className="habit-card__swipe-area" {...swipe} style={{ touchAction: 'pan-y' }}>
-            {/* Ícone de categoria */}
+          {/* Área de arrasto: ícone + corpo */}
+          <div className="habit-card__swipe-area" ref={swipeAreaRef}>
             <div className="habit-card__icon" aria-hidden>
               {meta.icon}
             </div>
-
-            {/* Corpo */}
             <div className="habit-card__body">
               <span className="habit-card__name">{displayName}</span>
               {timeMeta && (
@@ -217,7 +220,6 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
 
           {/* Botões de ação sempre visíveis */}
           <div className="habit-card__right">
-            {/* Ignore — só quando pendente */}
             {status === 'pending' && (
               <button
                 className="habit-card__action-btn habit-card__action-btn--ignore"
@@ -227,8 +229,6 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
                 <IconSkip />
               </button>
             )}
-
-            {/* Done */}
             {status === 'pending' && (
               <button
                 className="habit-card__check"
@@ -241,8 +241,8 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
             {status === 'done' && (
               <button
                 className="habit-card__check habit-card__check--done"
-                aria-label={t('habits.undone')}
                 onClick={() => onUpdate(habit.id, 'pending')}
+                aria-label={t('habits.undone')}
               >
                 <IconCheck />
               </button>
@@ -250,8 +250,8 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
             {status === 'ignored' && (
               <button
                 className="habit-card__check habit-card__check--ignored"
-                aria-label={t('habits.revert')}
                 onClick={() => onUpdate(habit.id, 'pending')}
+                aria-label={t('habits.revert')}
               >
                 <IconSkip />
               </button>
@@ -266,9 +266,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
                   ? t('habits.doneAt', { time: completedAt })
                   : t('habits.doneFeedback')}
               </span>
-              <button
-                onClick={() => onUpdate(habit.id, 'pending')}
-              >
+              <button onClick={() => onUpdate(habit.id, 'pending')}>
                 {t('habits.undone')}
               </button>
             </div>
@@ -276,9 +274,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
           {status === 'ignored' && (
             <div className="habit-card__footer habit-card__footer--ignored">
               <span>{t('habits.ignoredFeedback')}</span>
-              <button
-                onClick={() => onUpdate(habit.id, 'pending')}
-              >
+              <button onClick={() => onUpdate(habit.id, 'pending')}>
                 {t('habits.revert')}
               </button>
             </div>
