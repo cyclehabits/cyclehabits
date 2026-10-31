@@ -101,6 +101,8 @@ function useSwipe(onSwipeLeft: () => void, onClose: () => void) {
   const moved = useRef(false)
 
   function onPointerDown(e: React.PointerEvent) {
+    // Não iniciar swipe se o clique veio de um botão
+    if ((e.target as HTMLElement).closest('button')) return
     startX.current = e.clientX
     startY.current = e.clientY
     moved.current = false
