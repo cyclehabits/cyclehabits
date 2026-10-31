@@ -1,10 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  /* Nossos tokens */
+  /* Tipografia */
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  /* Petrol */
   --petrol:        #1A6B8A;
   --petrol-hover:  #2589AC;
   --petrol-subtle: #E0F2F9;
+
+  /* Categorias */
+  --emerald:       #1FA876;
+  --emerald-light: #D6F5EB;
+  --amber:         #E8930A;
+  --amber-light:   #FEF3CD;
+  --coral:         #E0533A;
+  --coral-light:   #FDEAE6;
+  --violet:        #6B52C8;
+  --violet-light:  #EDE9FB;
+
+  /* Página */
   --bg-page:       #F2F7FA;
   --fg-page:       #0F2533;
 
@@ -13,9 +29,26 @@
   --color-awake-brand-hover: #2589AC;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --petrol-subtle: #0D3347;
+    --emerald-light: #0D3D2B;
+    --amber-light:   #3D2800;
+    --coral-light:   #3D1610;
+    --violet-light:  #1E1A3D;
+    --bg-page:       #0F1923;
+    --fg-page:       #E8F1F6;
+  }
+}
+
 [data-theme="dark"] {
-  --bg-page: #111827;
-  --fg-page: #F2F7FA;
+  --petrol-subtle: #0D3347;
+  --emerald-light: #0D3D2B;
+  --amber-light:   #3D2800;
+  --coral-light:   #3D1610;
+  --violet-light:  #1E1A3D;
+  --bg-page:       #0F1923;
+  --fg-page:       #E8F1F6;
 
   --color-awake-brand:       #1A6B8A;
   --color-awake-brand-hover: #2589AC;

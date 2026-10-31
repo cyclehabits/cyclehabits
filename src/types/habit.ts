@@ -1,4 +1,5 @@
-export type HabitStatus = 'pending' | 'done' | 'ignored'
+export type HabitStatus   = 'pending' | 'done' | 'ignored'
+export type HabitCategory = 'saude' | 'energia' | 'mindful' | 'conhecimento' | 'outra'
 
 export type Frequency =
   | { type: 'once' }
@@ -18,6 +19,8 @@ export interface Habit {
   expiresAt?: string     // "YYYY-MM-DD" — hábito para de aparecer após esta data
   createdAt: string
   archivedAt?: string
+  category?:     HabitCategory
+  notification?: boolean
 }
 
 export interface HabitOverride {
