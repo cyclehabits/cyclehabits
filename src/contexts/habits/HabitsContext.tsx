@@ -11,11 +11,14 @@ interface HabitsContextValue {
 const HabitsContext = createContext<HabitsContextValue>({ loading: true })
 
 export function HabitsProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Aguarda o Firebase resolver o estado de autenticação
+    if (authLoading) return
+
     if (!user) {
       setLoading(false)
       return
@@ -44,7 +47,7 @@ export function HabitsProvider({ children }: { children: ReactNode }) {
     )
 
     return unsubscribe
-  }, [user?.uid])
+  }, [user?.uid, authLoading])
 
   return (
     <HabitsContext.Provider value={{ loading }}>

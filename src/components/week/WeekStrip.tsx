@@ -21,7 +21,7 @@ function getWeekStart(date: Date): Date {
 }
 
 const WEEKS_BACK = 12
-const WEEKS_FORWARD = 2
+const WEEKS_FORWARD = 26
 
 export function WeekStrip({ selected, onChange }: WeekStripProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -100,12 +100,10 @@ export function WeekStrip({ selected, onChange }: WeekStripProps) {
                 const str = toLocalDateStr(day)
                 const isToday = str === todayStr
                 const isSelected = str === selectedStr
-                const isFuture = str > todayStr
 
                 return (
                   <button
                     key={str}
-                    disabled={isFuture}
                     className={`week-strip__day${isToday ? ' week-strip__day--today' : ''}${isSelected ? ' week-strip__day--selected' : ''}`}
                     onClick={() => onChange(day)}
                   >
