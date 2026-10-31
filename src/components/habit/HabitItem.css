@@ -258,3 +258,89 @@
 .habit-card__footer button:hover {
   text-decoration: underline;
 }
+
+/* ── Swipe wrapper ────────────────────────────────────────────────────────── */
+
+.habit-card-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.habit-card-wrap .habit-card {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.25s ease;
+  border-radius: 16px;
+}
+
+.habit-card-wrap--swiped .habit-card {
+  transform: translateX(-148px);
+}
+
+/* ── Botões revelados pelo swipe ─────────────────────────────────────────── */
+
+.habit-card__swipe-actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: stretch;
+  z-index: 0;
+}
+
+.habit-card__swipe-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 72px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: var(--font-body);
+  flex-direction: column;
+  gap: 4px;
+}
+
+.habit-card__swipe-btn--edit {
+  background: var(--color-awake-surface-raised);
+  color: var(--color-awake-text);
+}
+
+.habit-card__swipe-btn--delete {
+  background: var(--coral);
+  color: #fff;
+  border-radius: 0 16px 16px 0;
+}
+
+/* ── Botões de ação sempre visíveis ──────────────────────────────────────── */
+
+.habit-card__action-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-awake-border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: var(--color-awake-text-muted);
+  transition: border-color .15s, background .15s, color .15s;
+}
+
+.habit-card__action-btn--ignore:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: var(--amber-light);
+}
+
+.habit-card__action-btn--revert:hover {
+  border-color: var(--petrol);
+  color: var(--petrol);
+  background: var(--petrol-subtle);
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { Habit, HabitLog, HabitStatus, HabitOverride, HabitCategory } from '@/types/habit'
@@ -57,14 +57,6 @@ const IconOutra = () => (
   </svg>
 )
 
-const IconMenu = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-    <circle cx="12" cy="5" r="1.5" fill="currentColor"/>
-    <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-    <circle cx="12" cy="19" r="1.5" fill="currentColor"/>
-  </svg>
-)
-
 const IconCheck = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
     <polyline points="2.5,8 6.5,12 13.5,4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -96,12 +88,36 @@ function derivePeriod(startTime?: string): string {
   return 'Noite'
 }
 
+// ── Swipe hook ────────────────────────────────────────────────────────────────
+
+const SWIPE_THRESHOLD = 60
+
+function useSwipe(onSwipeLeft: () => void, onClose: () => void) {
+  const startX = useRef<number | null>(null)
+  const isDragging = useRef(false)
+
+  function onPointerDown(e: React.PointerEvent) {
+    startX.current = e.clientX
+    isDragging.current = false
+  }
+
+  function onPointerUp(e: React.PointerEvent) {
+    if (startX.current === null) return
+    const delta = startX.current - e.clientX
+    if (delta > SWIPE_THRESHOLD) onSwipeLeft()
+    else if (delta < -SWIPE_THRESHOLD) onClose()
+    startX.current = null
+  }
+
+  return { onPointerDown, onPointerUp }
+}
+
 // ── Componente principal ──────────────────────────────────────────────────────
 
 export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [showMenu, setShowMenu] = useState(false)
+  const [swiped, setSwiped] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
@@ -123,111 +139,133 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
     : null
 
   function handleEditClick() {
-    setShowMenu(false)
+    setSwiped(false)
     if (!isRecurring(habit)) navigate(`/habits?edit=${habit.id}`)
     else setShowEditModal(true)
   }
 
   function handleDeleteClick() {
-    setShowMenu(false)
+    setSwiped(false)
     if (!isRecurring(habit)) deleteHabit.mutate(habit.id)
     else setShowDeleteModal(true)
   }
 
+  const swipe = useSwipe(() => setSwiped(true), () => setSwiped(false))
+
   return (
     <>
-      <li className={`habit-card habit-card--${status} habit-card--${category}`}>
-
-        {/* Ícone de categoria */}
-        <div className="habit-card__icon" aria-hidden>
-          {meta.icon}
+      <li className={`habit-card-wrap${swiped ? ' habit-card-wrap--swiped' : ''}`}>
+        {/* Ações reveladas pelo swipe */}
+        <div className="habit-card__swipe-actions" aria-hidden={!swiped}>
+          <button
+            className="habit-card__swipe-btn habit-card__swipe-btn--edit"
+            onClick={handleEditClick}
+            tabIndex={swiped ? 0 : -1}
+          >
+            ✏️ {t('habits.edit')}
+          </button>
+          <button
+            className="habit-card__swipe-btn habit-card__swipe-btn--delete"
+            onClick={handleDeleteClick}
+            tabIndex={swiped ? 0 : -1}
+          >
+            🗑️ {t('habits.delete')}
+          </button>
         </div>
 
-        {/* Corpo */}
-        <div className="habit-card__body">
-          <span className="habit-card__name">{displayName}</span>
-          {timeMeta && (
-            <span className="habit-card__time">{timeMeta}</span>
-          )}
-          <span className="habit-card__badge">
-            {meta.emoji} {meta.label}
-          </span>
-        </div>
+        {/* Card principal */}
+        <div
+          className={`habit-card habit-card--${status} habit-card--${category}`}
+          {...swipe}
+        >
+          {/* Ícone de categoria */}
+          <div className="habit-card__icon" aria-hidden>
+            {meta.icon}
+          </div>
 
-        {/* Botão de check + menu */}
-        <div className="habit-card__right">
-          {status === 'pending' && (
-            <button
-              className="habit-card__check"
-              onClick={() => onUpdate(habit.id, 'done')}
-              aria-label={t('habits.done')}
-            >
-              <IconCheck />
-            </button>
-          )}
-          {status === 'done' && (
-            <button
-              className="habit-card__check habit-card__check--done"
-              onClick={() => onUpdate(habit.id, 'pending')}
-              aria-label="Desfazer"
-            >
-              <IconCheck />
-            </button>
-          )}
-          {status === 'ignored' && (
-            <button
-              className="habit-card__check habit-card__check--ignored"
-              onClick={() => onUpdate(habit.id, 'pending')}
-              aria-label="Reverter"
-            >
-              <IconSkip />
-            </button>
-          )}
+          {/* Corpo */}
+          <div className="habit-card__body">
+            <span className="habit-card__name">{displayName}</span>
+            {timeMeta && (
+              <span className="habit-card__time">{timeMeta}</span>
+            )}
+            <span className="habit-card__badge">
+              {meta.emoji} {meta.label}
+            </span>
+          </div>
 
-          <div className="habit-card__menu-wrap">
-            <button
-              className="habit-card__menu-btn"
-              onClick={() => setShowMenu(v => !v)}
-              aria-label="Opções"
-            >
-              <IconMenu />
-            </button>
-            {showMenu && (
-              <div className="habit-card__menu-dropdown">
-                {status === 'pending' && (
-                  <button onClick={() => { setShowMenu(false); onUpdate(habit.id, 'ignored') }}>
-                    <IconSkip /> {t('habits.ignore')}
-                  </button>
-                )}
-                <button onClick={handleEditClick}>✏️ {t('habits.edit')}</button>
-                <button
-                  className="habit-card__menu-delete"
-                  onClick={handleDeleteClick}
-                >
-                  🗑️ {t('habits.delete')}
-                </button>
-              </div>
+          {/* Botões de ação sempre visíveis */}
+          <div className="habit-card__right">
+            {/* Ignore / Reverter */}
+            {status === 'pending' && (
+              <button
+                className="habit-card__action-btn habit-card__action-btn--ignore"
+                onClick={() => onUpdate(habit.id, 'ignored')}
+                aria-label={t('habits.ignore')}
+              >
+                <IconSkip />
+              </button>
+            )}
+            {(status === 'done' || status === 'ignored') && (
+              <button
+                className="habit-card__action-btn habit-card__action-btn--revert"
+                onClick={() => onUpdate(habit.id, 'pending')}
+                aria-label={status === 'done' ? t('habits.undone') : t('habits.revert')}
+              >
+                ↩
+              </button>
+            )}
+
+            {/* Done */}
+            {status === 'pending' && (
+              <button
+                className="habit-card__check"
+                onClick={() => onUpdate(habit.id, 'done')}
+                aria-label={t('habits.done')}
+              >
+                <IconCheck />
+              </button>
+            )}
+            {status === 'done' && (
+              <button
+                className="habit-card__check habit-card__check--done"
+                aria-label={t('habits.undone')}
+                onClick={() => onUpdate(habit.id, 'pending')}
+              >
+                <IconCheck />
+              </button>
+            )}
+            {status === 'ignored' && (
+              <button
+                className="habit-card__check habit-card__check--ignored"
+                aria-label={t('habits.revert')}
+                onClick={() => onUpdate(habit.id, 'pending')}
+              >
+                <IconSkip />
+              </button>
             )}
           </div>
-        </div>
 
-        {/* Rodapé de status */}
-        {status === 'done' && (
-          <div className="habit-card__footer habit-card__footer--done">
-            <span>✓ Concluído{completedAt ? ` às ${completedAt}` : ''}</span>
-            <button onClick={() => onUpdate(habit.id, 'pending')}>Desfazer</button>
-          </div>
-        )}
-        {status === 'ignored' && (
-          <div className="habit-card__footer habit-card__footer--ignored">
-            <span>Ignorado hoje</span>
-            <button onClick={() => onUpdate(habit.id, 'pending')}>Reverter</button>
-          </div>
-        )}
+          {/* Rodapé de status */}
+          {status === 'done' && (
+            <div className="habit-card__footer habit-card__footer--done">
+              <span>
+                {completedAt
+                  ? t('habits.doneAt', { time: completedAt })
+                  : t('habits.doneFeedback')}
+              </span>
+            </div>
+          )}
+          {status === 'ignored' && (
+            <div className="habit-card__footer habit-card__footer--ignored">
+              <span>{t('habits.ignoredFeedback')}</span>
+            </div>
+          )}
+        </div>
       </li>
 
-      {showMenu && (
-        <div className="habit-card__overlay" onClick={() => setShowMenu(false)} />
+      {swiped && (
+        <div className="habit-card__overlay" onClick={() => setSwiped(false)} />
       )}
 
       {showEditModal && (

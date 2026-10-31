@@ -49,7 +49,12 @@
       "title": "¿Qué deseas eliminar?",
       "thisDay": "Solo este día",
       "allEvents": "Todos los eventos"
-    }
+    },
+    "undone": "Deshacer",
+    "revert": "Revertir",
+    "doneAt": "Hecho a las {{time}}",
+    "doneFeedback": "✓ Hecho",
+    "ignoredFeedback": "Ignorado hoy"
   },
   "history": {
     "title": "Historial",

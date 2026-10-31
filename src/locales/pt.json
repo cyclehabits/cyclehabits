@@ -49,7 +49,12 @@
       "title": "O que deseja excluir?",
       "thisDay": "Apenas este dia",
       "allEvents": "Todos os eventos"
-    }
+    },
+    "undone": "Desfazer",
+    "revert": "Reverter",
+    "doneAt": "Concluído às {{time}}",
+    "doneFeedback": "✓ Concluído",
+    "ignoredFeedback": "Ignorado hoje"
   },
   "history": {
     "title": "Histórico",
