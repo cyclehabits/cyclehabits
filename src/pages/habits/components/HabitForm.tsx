@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@awakr/awake-ui/button'
 import { Field } from '@awakr/awake-ui/field'
 import { Switch } from '@awakr/awake-ui/switch'
+import { Toggle } from '@awakr/awake-ui/toggle'
 import type { Frequency, HabitCategory } from '@/types/habit'
 import './HabitForm.css'
 
@@ -268,16 +269,16 @@ export function HabitForm({
             }
             className="habit-form__duration-value"
           />
-          <select
-            className="habit-form__select"
-            value={durationUnit}
-            disabled={!hasDuration}
-            onChange={e => setDurationUnit(e.target.value as DurationUnit)}
-          >
-            <option value="day">{t('habits.form.durationDay')}</option>
-            <option value="month">{t('habits.form.durationMonth')}</option>
-            <option value="year">{t('habits.form.durationYear')}</option>
-          </select>
+          {(['day', 'month', 'year'] as DurationUnit[]).map(unit => (
+            <Toggle
+              key={unit}
+              checked={durationUnit === unit}
+              onCheckedChange={() => setDurationUnit(unit)}
+              disabled={!hasDuration}
+            >
+              {t(`habits.form.duration${unit.charAt(0).toUpperCase() + unit.slice(1)}`)}
+            </Toggle>
+          ))}
         </div>
       </div>
 
