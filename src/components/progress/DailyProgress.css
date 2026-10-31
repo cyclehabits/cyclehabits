@@ -1,34 +1,98 @@
 @reference "tailwindcss";
 
-.daily-progress {
-  @apply flex flex-col gap-2;
+.dp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--color-awake-surface);
+  box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.04);
 }
 
-.daily-progress__header {
-  @apply flex justify-between items-center;
+/* Cabeçalho */
+.dp-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.daily-progress__label {
-  @apply text-xs font-medium uppercase tracking-wide;
+.dp-card__title {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
   color: var(--color-awake-text-muted);
 }
 
-.daily-progress__count {
-  @apply text-sm font-bold;
+.dp-card__pct {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--petrol);
 }
 
-.daily-progress__bar-track {
-  @apply h-2 rounded-full overflow-hidden;
+/* Barra (awake-ui) */
+.dp-card__bar-root {
+  width: 100%;
+}
+
+.dp-card__bar-track {
+  height: 6px;
+  border-radius: 999px;
   background: var(--color-awake-border);
+  overflow: hidden;
 }
 
-.daily-progress__bar-fill {
-  @apply h-full rounded-full transition-all duration-500;
+.dp-card__bar-fill {
+  height: 100%;
+  border-radius: 999px;
   background: var(--petrol);
+  transition: width .5s ease;
 }
 
-.daily-progress__congrats {
-  @apply text-xs text-center mt-1;
+/* Chips de contagem */
+.dp-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dp-chip {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.dp-chip--done {
+  background: var(--emerald-light);
+  color: var(--emerald);
+}
+
+.dp-chip--ignored {
+  background: var(--amber-light);
+  color: var(--amber);
+}
+
+.dp-chip--remaining {
+  background: var(--petrol-subtle);
+  color: var(--petrol);
+}
+
+.dp-chip--empty {
+  background: var(--color-awake-surface-raised);
   color: var(--color-awake-text-muted);
+}
+
+/* Parabéns */
+.dp-card__congrats {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  text-align: center;
+  color: var(--emerald);
+  margin-top: 2px;
 }

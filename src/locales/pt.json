@@ -157,6 +157,10 @@
     "loading": "Carregando…",
     "progress": "Progresso do dia",
     "congrats": "🎉 Todos os hábitos concluídos!",
-    "today": "Hoje"
+    "today": "Hoje",
+    "done": "feitos",
+    "ignored": "ignorados",
+    "remaining": "restantes",
+    "habits": "hábitos"
   }
 }

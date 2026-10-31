@@ -37,7 +37,8 @@ export default function DashboardPage() {
     [habits, selectedDate, overridesMap],
   )
 
-  const doneCount = todayHabits.filter((h) => logs[h.id]?.status === 'done').length
+  const doneCount    = todayHabits.filter((h) => logs[h.id]?.status === 'done').length
+  const ignoredCount = todayHabits.filter((h) => logs[h.id]?.status === 'ignored').length
 
   if (loading) {
     return <div className="dashboard-page dashboard-page--loading">{t('dashboard.loading')}</div>
@@ -50,7 +51,7 @@ export default function DashboardPage() {
 
         <WeekStrip selected={selectedDate} onChange={setSelectedDate} />
 
-        <DailyProgress done={doneCount} total={todayHabits.length} />
+        <DailyProgress done={doneCount} ignored={ignoredCount} total={todayHabits.length} />
 
         <section className="dashboard-page__section">
           <HabitList
