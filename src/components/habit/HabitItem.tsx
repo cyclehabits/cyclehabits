@@ -72,12 +72,14 @@ const IconSkip = () => (
 
 // ── Helpers de categoria ──────────────────────────────────────────────────────
 
-const CATEGORY_META: Record<HabitCategory, { icon: React.ReactNode; label: string; emoji: string }> = {
-  saude:        { icon: <IconSaude />,        label: 'Saúde',        emoji: '💊' },
-  energia:      { icon: <IconEnergia />,      label: 'Energia',      emoji: '⚡' },
-  mindful:      { icon: <IconMindful />,      label: 'Mindful',      emoji: '🧘' },
-  conhecimento: { icon: <IconConhecimento />, label: 'Conhecimento', emoji: '📚' },
-  outra:        { icon: <IconOutra />,        label: 'Outra',        emoji: '⭐' },
+function useCategoryMeta(t: (key: string) => string): Record<HabitCategory, { icon: React.ReactNode; label: string; emoji: string }> {
+  return {
+    saude:        { icon: <IconSaude />,        label: t('habits.categories.saude'),        emoji: '💊' },
+    energia:      { icon: <IconEnergia />,      label: t('habits.categories.energia'),      emoji: '⚡' },
+    mindful:      { icon: <IconMindful />,      label: t('habits.categories.mindful'),      emoji: '🧘' },
+    conhecimento: { icon: <IconConhecimento />, label: t('habits.categories.conhecimento'), emoji: '📚' },
+    outra:        { icon: <IconOutra />,        label: t('habits.categories.outra'),        emoji: '⭐' },
+  }
 }
 
 function derivePeriod(startTime?: string): string {
@@ -128,6 +130,7 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
   const displayName      = override?.name     ?? habit.name
   const displayStartTime = override?.startTime ?? habit.startTime
   const category         = habit.category ?? 'outra'
+  const CATEGORY_META    = useCategoryMeta(t)
   const meta             = CATEGORY_META[category]
   const period           = derivePeriod(displayStartTime)
   const timeMeta         = displayStartTime

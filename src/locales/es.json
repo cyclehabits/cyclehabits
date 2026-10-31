@@ -54,7 +54,14 @@
     "revert": "Revertir",
     "doneAt": "Hecho a las {{time}}",
     "doneFeedback": "✓ Hecho",
-    "ignoredFeedback": "Ignorado hoy"
+    "ignoredFeedback": "Ignorado hoy",
+    "categories": {
+      "saude": "Salud",
+      "energia": "Energía",
+      "mindful": "Mindful",
+      "conhecimento": "Conocimiento",
+      "outra": "Otra"
+    }
   },
   "history": {
     "title": "Historial",
