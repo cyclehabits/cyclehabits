@@ -16,6 +16,8 @@ export interface HabitFormValues {
   startDate: string
   expiresAt?: string
   category?: HabitCategory
+  notificationTime?: string
+  notification: boolean
 }
 
 interface HabitFormProps {
@@ -109,6 +111,8 @@ export function HabitForm({
   const [hasDuration, setHasDuration] = useState(!!initialValues?.expiresAt)
   const [durationValue, setDurationValue] = useState<number | ''>(1)
   const [durationUnit, setDurationUnit] = useState<DurationUnit>('month')
+  const [notificationEnabled, setNotificationEnabled] = useState(initialValues?.notification ?? false)
+const [notificationTime, setNotificationTime] = useState(initialValues?.notificationTime ?? '')
 
   function toggleWeekDay(day: number) {
     setWeekDays(prev =>
@@ -153,6 +157,8 @@ export function HabitForm({
       startDate: computedStartDate,
       expiresAt,
       category,
+      notification: notificationEnabled,
+      notificationTime: notificationEnabled ? notificationTime : undefined,
     })
   }
 
@@ -323,6 +329,28 @@ export function HabitForm({
           />
         </div>
       </div>
+      <div className="habit-form__field">
+  <div className="habit-form__duration-header">
+    <label className="habit-form__label">🔔 {t('habits.form.notification')}</label>
+    <Switch.Root
+      checked={notificationEnabled}
+      onCheckedChange={(v) => {
+        setNotificationEnabled(v)
+        if (v && !notificationTime) setNotificationTime(startTime)
+      }}
+      aria-label={t('habits.form.notification')}
+    >
+      <Switch.Thumb />
+    </Switch.Root>
+  </div>
+  {notificationEnabled && (
+    <Field.Control
+      type="time"
+      value={notificationTime}
+      onChange={e => setNotificationTime(e.target.value)}
+    />
+  )}
+</div>
 
       {hasTimeWarning && (
         <Alert variant="warning">

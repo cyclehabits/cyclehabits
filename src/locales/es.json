@@ -31,6 +31,7 @@
       "once": "Único",
       "startTime": "Inicio",
       "endTime": "Fin",
+      "notification": "Recordatorio",
       "duration": "Expiración",
       "durationDay": "Día(s)",
       "durationMonth": "Mes(es)",

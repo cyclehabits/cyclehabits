@@ -22,6 +22,9 @@ export interface Habit {
   archivedAt?: string
   category?:     HabitCategory
   notification?: boolean
+  notificationTime?: string        // "HH:MM" — horário do push
+  notificationIds?: string[]       // IDs OneSignal para cancelamento
+  notificationSchedule?: Record<string, string>  // "YYYY-MM-DD" → oneSignalId
 }
 
 export interface HabitOverride {

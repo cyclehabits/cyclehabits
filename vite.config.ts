@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icons/*.png'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icons/*.png', 'OneSignalSDKWorker.js'],
       manifest: {
         name: 'CycleHabits',
         short_name: 'CycleHabits',
@@ -41,6 +41,7 @@ export default defineConfig({
         ],
       },
       workbox: {
+        globIgnores: ['OneSignalSDKWorker.js'],
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           {

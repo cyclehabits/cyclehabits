@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from 'react'
 import { onAuthStateChanged, signOut as firebaseSignOut, User } from 'firebase/auth'
 import { auth } from '@/lib/firebase/auth'
 import { getOrCreateProfile } from '@/lib/firebase/profile'
+import { initOneSignal } from '@/lib/onesignal'
 
 interface AuthContextValue {
   user: User | null
@@ -21,10 +22,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) await getOrCreateProfile(firebaseUser)
+      if (firebaseUser) {
+        await getOrCreateProfile(firebaseUser)
+        initOneSignal(firebaseUser.uid).catch(console.error)
+      }
       setUser(firebaseUser)
       setLoading(false)
     })
+
     return unsubscribe
   }, [])
 

@@ -31,6 +31,7 @@
       "once": "Once",
       "startTime": "Start time",
       "endTime": "End time",
+      "notification": "Reminder",
       "duration": "Expiration",
       "durationDay": "Day(s)",
       "durationMonth": "Month(s)",
