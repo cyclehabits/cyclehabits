@@ -6,7 +6,7 @@ export type Frequency =
   | { type: 'daily' }
   | { type: 'weekly'; days: number[] }   // 0=Dom, 1=Seg...
   | { type: 'monthly'; day: number }
-  | { type: 'every'; days: number }      // a cada N dias desde a criação
+  | { type: 'every'; days: number }      // a cada N dias desde startDate
 
 export interface Habit {
   id: string
@@ -16,6 +16,7 @@ export interface Habit {
   frequency: Frequency
   startTime?: string     // "HH:MM"
   endTime?: string       // "HH:MM"
+  startDate?: string     // "YYYY-MM-DD" — data de início (calculada ou definida manualmente)
   expiresAt?: string     // "YYYY-MM-DD" — hábito para de aparecer após esta data
   createdAt: string
   archivedAt?: string

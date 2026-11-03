@@ -10,6 +10,7 @@ interface CreateHabitInput {
   frequency: Frequency
   startTime?: string
   endTime?: string
+  startDate?: string
   expiresAt?: string
   category?: HabitCategory
 }

@@ -166,3 +166,36 @@
   flex-wrap: wrap;
   gap: 6px;
 }
+
+/* startDate field */
+.habit-form__date-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.habit-form__checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-text-secondary, #888);
+  cursor: pointer;
+  user-select: none;
+}
+
+.habit-form__checkbox-label input[type='checkbox'] {
+  accent-color: var(--petrol);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+/* inline validation errors */
+.habit-form__error {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--color-error, #e53e3e);
+}

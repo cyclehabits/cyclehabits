@@ -29,13 +29,19 @@
       "every": "A cada",
       "everyDays": "dias",
       "once": "Único",
-      "startTime": "Início (opcional)",
-      "endTime": "Fim (opcional)",
+      "startTime": "Início",
+      "endTime": "Fim",
       "duration": "Expiração",
       "durationDay": "Dia(s)",
       "durationMonth": "Mês(es)",
       "durationYear": "Ano(s)",
-      "category": "Categoria"
+      "category": "Categoria",
+      "startDate": "Data de início",
+      "startDateManual": "Definir manualmente",
+      "startDateAuto": "Calculado pelo horário",
+      "startDateRequired": "Selecione uma data de início",
+      "endTimeAfterStart": "Horário de fim deve ser após o início",
+      "startTimeFuture": "Para hoje, o início deve ser no futuro"
     },
     "edit": "Editar hábito",
     "editScope": {

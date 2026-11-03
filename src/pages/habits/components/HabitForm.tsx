@@ -10,8 +10,9 @@ export interface HabitFormValues {
   name: string
   description?: string
   frequency: Frequency
-  startTime?: string
-  endTime?: string
+  startTime: string
+  endTime: string
+  startDate: string
   expiresAt?: string
   category?: HabitCategory
 }
@@ -34,6 +35,37 @@ const CATEGORY_CHIPS: { value: HabitCategory; label: string; emoji: string }[] =
   { value: 'conhecimento', label: 'Conhecimento',  emoji: '📚' },
   { value: 'outra',        label: 'Outra',         emoji: '✦'  },
 ]
+
+function todayLocal(): string {
+  const now = new Date()
+  return [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, '0'),
+    String(now.getDate()).padStart(2, '0'),
+  ].join('-')
+}
+
+function tomorrowLocal(): string {
+  const d = new Date()
+  d.setDate(d.getDate() + 1)
+  return [
+    d.getFullYear(),
+    String(d.getMonth() + 1).padStart(2, '0'),
+    String(d.getDate()).padStart(2, '0'),
+  ].join('-')
+}
+
+function currentTimeHHMM(): string {
+  const now = new Date()
+  return [
+    String(now.getHours()).padStart(2, '0'),
+    String(now.getMinutes()).padStart(2, '0'),
+  ].join(':')
+}
+
+function calcAutoStartDate(startTime: string): string {
+  return startTime > currentTimeHHMM() ? todayLocal() : tomorrowLocal()
+}
 
 function calcExpiresAt(value: number, unit: DurationUnit): string {
   const d = new Date()
@@ -71,6 +103,8 @@ export function HabitForm({
   )
   const [startTime, setStartTime] = useState(initialValues?.startTime ?? '')
   const [endTime, setEndTime] = useState(initialValues?.endTime ?? '')
+  const [startDateEnabled, setStartDateEnabled] = useState(!!initialValues?.startDate)
+  const [startDate, setStartDate] = useState(initialValues?.startDate ?? '')
   const [hasDuration, setHasDuration] = useState(!!initialValues?.expiresAt)
   const [durationValue, setDurationValue] = useState<number | ''>(1)
   const [durationUnit, setDurationUnit] = useState<DurationUnit>('month')
@@ -93,8 +127,14 @@ export function HabitForm({
     e.preventDefault()
     if (!name.trim()) return
 
+    const computedStartDate = startDateEnabled
+      ? startDate
+      : calcAutoStartDate(startTime)
+
     let expiresAt: string | undefined
-    if (hasDuration && durationValue !== '' && durationValue > 0) {
+    if (freqType === 'once') {
+      expiresAt = computedStartDate
+    } else if (hasDuration && durationValue !== '' && durationValue > 0) {
       expiresAt = calcExpiresAt(durationValue, durationUnit)
     }
 
@@ -102,19 +142,20 @@ export function HabitForm({
       name: name.trim(),
       description: description.trim() || undefined,
       frequency: buildFrequency(),
-      startTime: startTime || undefined,
-      endTime: endTime || undefined,
+      startTime,
+      endTime,
+      startDate: computedStartDate,
       expiresAt,
       category,
     })
   }
 
   const FREQ_LABELS: Record<FreqType, string> = {
-    once: t('habits.form.once'),
-    daily: t('habits.form.daily'),
-    weekly: t('habits.form.weekly'),
+    once:    t('habits.form.once'),
+    daily:   t('habits.form.daily'),
+    weekly:  t('habits.form.weekly'),
     monthly: t('habits.form.monthly'),
-    every: t('habits.form.every'),
+    every:   t('habits.form.every'),
   }
 
   return (
@@ -226,63 +267,102 @@ export function HabitForm({
         </>
       )}
 
+      <div className="habit-form__field">
+        <div className="habit-form__date-header">
+          <label className="habit-form__label">{t('habits.form.startDate')}</label>
+          <label className="habit-form__checkbox-label">
+            <input
+              type="checkbox"
+              checked={startDateEnabled}
+              onChange={e => {
+                setStartDateEnabled(e.target.checked)
+                if (!e.target.checked) setStartDate('')
+              }}
+            />
+            {t('habits.form.startDateManual')}
+          </label>
+        </div>
+        <Field.Control
+          type="date"
+          min={todayLocal()}
+          value={startDate}
+          disabled={!startDateEnabled}
+          onChange={e => setStartDate(e.target.value)}
+        />
+      </div>
+
       <div className="habit-form__time-row">
         <div className="habit-form__field habit-form__field--half">
-          <label className="habit-form__label">{t('habits.form.startTime')}</label>
+          <label className="habit-form__label">{t('habits.form.startTime')} *</label>
           <Field.Control
             type="time"
             value={startTime}
-            onChange={e => setStartTime(e.target.value)}
+            required
+            min={startDateEnabled && startDate === todayLocal() ? currentTimeHHMM() : undefined}
+            onChange={e => {
+              const val = e.target.value
+              const minTime = startDateEnabled && startDate === todayLocal()
+                ? currentTimeHHMM()
+                : undefined
+              setStartTime(minTime && val < minTime ? minTime : val)
+            }}
           />
         </div>
         <div className="habit-form__field habit-form__field--half">
-          <label className="habit-form__label">{t('habits.form.endTime')}</label>
+          <label className="habit-form__label">{t('habits.form.endTime')} *</label>
           <Field.Control
             type="time"
             value={endTime}
-            onChange={e => setEndTime(e.target.value)}
+            required
+            min={startTime || undefined}
+            onChange={e => {
+              const val = e.target.value
+              setEndTime(startTime && val <= startTime ? startTime : val)
+            }}
           />
         </div>
       </div>
 
-      <div className="habit-form__field">
-        <div className="habit-form__duration-header">
-          <label className="habit-form__label">{t('habits.form.duration')}</label>
-          <Switch.Root
-            checked={hasDuration}
-            onCheckedChange={setHasDuration}
-            aria-label={t('habits.form.duration')}
-          >
-            <Switch.Thumb />
-          </Switch.Root>
-        </div>
-        <div className="habit-form__duration-row">
-          <Field.Control
-            type="number"
-            min={1}
-            max={999}
-            value={durationValue}
-            disabled={!hasDuration}
-            onChange={e =>
-              setDurationValue(e.target.value === '' ? '' : Math.max(1, Number(e.target.value)))
-            }
-            className="habit-form__duration-value"
-          />
-        </div>
-        <div className="habit-form__duration-units">
-          {(['day', 'month', 'year'] as DurationUnit[]).map(unit => (
-            <button
-              key={unit}
-              type="button"
-              disabled={!hasDuration}
-              className={`habit-form__freq-tab${durationUnit === unit ? ' habit-form__freq-tab--active' : ''}`}
-              onClick={() => setDurationUnit(unit)}
+      {freqType !== 'once' && (
+        <div className="habit-form__field">
+          <div className="habit-form__duration-header">
+            <label className="habit-form__label">{t('habits.form.duration')}</label>
+            <Switch.Root
+              checked={hasDuration}
+              onCheckedChange={setHasDuration}
+              aria-label={t('habits.form.duration')}
             >
-              {t(`habits.form.duration${unit.charAt(0).toUpperCase() + unit.slice(1)}`)}
-            </button>
-          ))}
+              <Switch.Thumb />
+            </Switch.Root>
+          </div>
+          <div className="habit-form__duration-row">
+            <Field.Control
+              type="number"
+              min={1}
+              max={999}
+              value={durationValue}
+              disabled={!hasDuration}
+              onChange={e =>
+                setDurationValue(e.target.value === '' ? '' : Math.max(1, Number(e.target.value)))
+              }
+              className="habit-form__duration-value"
+            />
+          </div>
+          <div className="habit-form__duration-units">
+            {(['day', 'month', 'year'] as DurationUnit[]).map(unit => (
+              <button
+                key={unit}
+                type="button"
+                disabled={!hasDuration}
+                className={`habit-form__freq-tab${durationUnit === unit ? ' habit-form__freq-tab--active' : ''}`}
+                onClick={() => setDurationUnit(unit)}
+              >
+                {t(`habits.form.duration${unit.charAt(0).toUpperCase() + unit.slice(1)}`)}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="habit-form__actions">
         <Button type="button" variant="ghost" size="md" onClick={onCancel}>

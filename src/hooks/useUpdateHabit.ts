@@ -11,6 +11,7 @@ interface UpdateHabitInput {
   frequency: Frequency
   startTime?: string
   endTime?: string
+  startDate?: string
   expiresAt?: string
   category?: HabitCategory
 }
@@ -20,16 +21,20 @@ export function useUpdateHabit() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ habitId, name, description, frequency, startTime, endTime, expiresAt, category }: UpdateHabitInput) => {
+    mutationFn: async ({
+      habitId, name, description, frequency,
+      startTime, endTime, startDate, expiresAt, category,
+    }: UpdateHabitInput) => {
       if (!user) throw new Error('Não autenticado')
       await updateDoc(doc(db, 'users', user.uid, 'habits', habitId), {
         name,
         frequency,
-        description: description ?? deleteField(),
-        startTime: startTime ?? deleteField(),
-        endTime: endTime ?? deleteField(),
-        expiresAt: expiresAt ?? deleteField(),
-        category: category ?? deleteField(),
+        description:  description  ?? deleteField(),
+        startTime:    startTime    ?? deleteField(),
+        endTime:      endTime      ?? deleteField(),
+        startDate:    startDate    ?? deleteField(),
+        expiresAt:    expiresAt    ?? deleteField(),
+        category:     category     ?? deleteField(),
       })
     },
     onSuccess: () => {

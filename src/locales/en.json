@@ -29,13 +29,19 @@
       "every": "Every",
       "everyDays": "days",
       "once": "Once",
-      "startTime": "Start time (optional)",
-      "endTime": "End time (optional)",
+      "startTime": "Start time",
+      "endTime": "End time",
       "duration": "Expiration",
       "durationDay": "Day(s)",
       "durationMonth": "Month(s)",
       "durationYear": "Year(s)",
-      "category": "Category"
+      "category": "Category",
+      "startDate": "Start date",
+      "startDateManual": "Set manually",
+      "startDateAuto": "Calculated by time",
+      "startDateRequired": "Select a start date",
+      "endTimeAfterStart": "End time must be after start time",
+      "startTimeFuture": "For today, start time must be in the future"
     },
     "edit": "Edit habit",
     "editScope": {
