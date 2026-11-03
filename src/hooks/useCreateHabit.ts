@@ -13,6 +13,8 @@ interface CreateHabitInput {
   startDate?: string
   expiresAt?: string
   category?: HabitCategory
+  notification?: boolean
+  notificationTime?: string
 }
 
 function stripUndefined<T extends object>(obj: T): Partial<T> {
