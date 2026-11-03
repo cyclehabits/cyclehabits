@@ -14,3 +14,53 @@
   @apply text-2xl font-bold mb-1;
   color: var(--color-awake-text);
 }
+
+/* Wrappers de layout — no mobile são transparentes ao box model */
+.history-page__body,
+.history-page__main,
+.history-page__aside {
+  display: contents;
+}
+
+/* ── Desktop layout (>= 1024px) ──────────────────────────────────── */
+@media (min-width: 1024px) {
+  .history-page__inner {
+    max-width: 1100px;
+    margin-inline: auto;
+    padding: 2rem 2.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .history-page__body {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .history-page__main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Card styling para seções do main */
+  .history-page__main > * {
+    background: var(--color-awake-surface);
+    border: 1px solid var(--color-awake-border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  }
+
+  .history-page__aside {
+    position: sticky;
+    top: 2rem;
+    background: var(--color-awake-surface);
+    border: 1px solid var(--color-awake-border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  }
+}

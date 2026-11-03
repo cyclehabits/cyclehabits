@@ -1,5 +1,61 @@
 @reference "tailwindcss";
 
+/* ── Header (mês + arrows) ───────────────────────────────────────── */
+
+.week-strip-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.week-strip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 0.25rem;
+}
+
+.week-strip-month {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-awake-text-muted);
+}
+
+/* Arrows: ocultos no mobile, visíveis no desktop */
+.week-strip-arrows {
+  display: none;
+}
+
+.week-strip-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-awake-text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.week-strip-arrow:hover:not(:disabled) {
+  background: var(--color-awake-border);
+  color: var(--color-awake-text);
+}
+
+.week-strip-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ── Mobile: scroll horizontal ───────────────────────────────────── */
+
 .week-strip-scroll {
   display: flex;
   overflow-x: scroll;
@@ -21,6 +77,13 @@
   scroll-snap-align: start;
   padding-inline: 0;
 }
+
+/* Desktop grid: oculto no mobile */
+.week-strip--desktop {
+  display: none;
+}
+
+/* ── Day button ──────────────────────────────────────────────────── */
 
 .week-strip__day {
   @apply flex flex-col items-center gap-1 py-2 px-1 rounded-xl flex-1 border-none cursor-pointer transition-colors;
@@ -57,17 +120,37 @@
   color: #fff !important;
 }
 
-.week-strip-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
+/* ── Desktop layout (>= 1024px) ──────────────────────────────────── */
 
-.week-strip-month {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-awake-text-muted);
-  padding-inline: 0.25rem;
+@media (min-width: 1024px) {
+  /* Oculta o scroll mobile */
+  .week-strip-scroll {
+    display: none;
+  }
+
+  /* Exibe o grid fixo de 7 colunas */
+  .week-strip--desktop {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+  }
+
+  .week-strip--desktop .week-strip__day {
+    border-radius: 12px;
+    padding: 0.625rem 0.25rem;
+  }
+
+  .week-strip--desktop .week-strip__label {
+    font-size: 11px;
+  }
+
+  .week-strip--desktop .week-strip__num {
+    font-size: 1.125rem;
+  }
+
+  /* Exibe as arrows */
+  .week-strip-arrows {
+    display: flex;
+    gap: 0.25rem;
+  }
 }

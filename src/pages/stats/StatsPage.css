@@ -74,3 +74,14 @@
   @apply h-full rounded-full transition-all;
   background: var(--color-awake-primary);
 }
+
+/* ── Desktop layout (>= 1024px) ──────────────────────────────────── */
+@media (min-width: 1024px) {
+  .stats-page__inner {
+    max-width: 680px;
+    margin-inline: auto;
+    padding: 2rem 2.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}

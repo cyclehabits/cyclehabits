@@ -49,20 +49,26 @@ export default function DashboardPage() {
       <div className="dashboard-page__inner">
         <PageHeader date={selectedDate} />
 
-        <WeekStrip selected={selectedDate} onChange={setSelectedDate} />
+        <div className="dashboard-page__body">
+          <div className="dashboard-page__main">
+            <WeekStrip selected={selectedDate} onChange={setSelectedDate} />
 
-        <DailyProgress done={doneCount} ignored={ignoredCount} total={todayHabits.length} />
+            <section className="dashboard-page__section">
+              <HabitList
+                habits={todayHabits}
+                logs={logs}
+                overrides={overridesMap}
+                date={dateStr}
+                onUpdate={(habitId, status) => updateLog({ habitId, status })}
+                emptyMessage={t('dashboard.noHabits')}
+              />
+            </section>
+          </div>
 
-        <section className="dashboard-page__section">
-          <HabitList
-            habits={todayHabits}
-            logs={logs}
-            overrides={overridesMap}
-            date={dateStr}
-            onUpdate={(habitId, status) => updateLog({ habitId, status })}
-            emptyMessage={t('dashboard.noHabits')}
-          />
-        </section>
+          <aside className="dashboard-page__aside">
+            <DailyProgress done={doneCount} ignored={ignoredCount} total={todayHabits.length} />
+          </aside>
+        </div>
       </div>
     </div>
   )

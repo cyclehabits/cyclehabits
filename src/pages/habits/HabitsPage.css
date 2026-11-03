@@ -63,3 +63,14 @@
 .habits-page__item-archive:hover {
   background: var(--color-awake-surface-hover, rgba(26,107,138,0.08));
 }
+
+/* ── Desktop layout (>= 1024px) ──────────────────────────────────── */
+@media (min-width: 1024px) {
+  .habits-page__inner {
+    max-width: 680px;
+    margin-inline: auto;
+    padding: 2rem 2.5rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}

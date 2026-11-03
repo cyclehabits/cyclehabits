@@ -1,4 +1,4 @@
-import { useMemo, useRef, useEffect, useState } from 'react'
+import { useMemo, useRef, useEffect, useState, useCallback } from 'react'
 import './WeekStrip.css'
 
 interface WeekStripProps {
@@ -20,6 +20,11 @@ function getWeekStart(date: Date): Date {
   return d
 }
 
+function getWeekLabel(days: Date[]): string {
+  const wednesday = days[3]
+  return `${MONTHS[wednesday.getMonth()]} ${wednesday.getFullYear()}`
+}
+
 const WEEKS_BACK = 12
 const WEEKS_FORWARD = 26
 
@@ -29,9 +34,30 @@ export function WeekStrip({ selected, onChange }: WeekStripProps) {
   const todayStr = toLocalDateStr(today)
   const selectedStr = toLocalDateStr(selected)
 
+  // Desktop: offset relativo à semana atual (0 = semana atual)
+  const [weekOffset, setWeekOffset] = useState<number>(() => {
+    const currentWeekStart = getWeekStart(today)
+    const selectedWeekStart = getWeekStart(selected)
+    const diff = Math.round(
+      (selectedWeekStart.getTime() - currentWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000)
+    )
+    return Math.max(-WEEKS_BACK, Math.min(WEEKS_FORWARD, diff))
+  })
+
+  const [isDesktop, setIsDesktop] = useState<boolean>(
+    () => window.matchMedia('(min-width: 1024px)').matches
+  )
+
   const [visibleMonth, setVisibleMonth] = useState<string>(() => {
     return `${MONTHS[selected.getMonth()]} ${selected.getFullYear()}`
   })
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   const weeks = useMemo(() => {
     const currentWeekStart = getWeekStart(today)
@@ -46,8 +72,28 @@ export function WeekStrip({ selected, onChange }: WeekStripProps) {
     })
   }, [])
 
-  // Scroll para a semana do selected na montagem
+  // Semana exibida no desktop
+  const desktopWeekIndex = WEEKS_BACK + weekOffset
+  const desktopDays = weeks[desktopWeekIndex]
+
+  // Atualiza o mês visível no desktop ao mudar offset
   useEffect(() => {
+    if (isDesktop) {
+      setVisibleMonth(getWeekLabel(desktopDays))
+    }
+  }, [isDesktop, weekOffset, desktopDays])
+
+  const handlePrev = useCallback(() => {
+    setWeekOffset(o => Math.max(-WEEKS_BACK, o - 1))
+  }, [])
+
+  const handleNext = useCallback(() => {
+    setWeekOffset(o => Math.min(WEEKS_FORWARD, o + 1))
+  }, [])
+
+  // Mobile: scroll para a semana do selected na montagem
+  useEffect(() => {
+    if (isDesktop) return
     const el = scrollRef.current
     if (!el) return
     const selectedWeekStart = toLocalDateStr(getWeekStart(selected))
@@ -57,10 +103,11 @@ export function WeekStrip({ selected, onChange }: WeekStripProps) {
         weekEl.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'center' })
       }
     })
-  }, [])
+  }, [isDesktop])
 
-  // IntersectionObserver para detectar semana visível
+  // Mobile: IntersectionObserver para detectar semana visível
   useEffect(() => {
+    if (isDesktop) return
     const el = scrollRef.current
     if (!el) return
 
@@ -74,7 +121,6 @@ export function WeekStrip({ selected, onChange }: WeekStripProps) {
           const weekStart = (visible.target as HTMLElement).dataset.weekStart
           if (weekStart) {
             const d = new Date(weekStart + 'T12:00:00')
-            // usa o mês da quarta-feira da semana (dia 3) para evitar ambiguidade
             const wednesday = new Date(d)
             wednesday.setDate(d.getDate() + 3)
             setVisibleMonth(`${MONTHS[wednesday.getMonth()]} ${wednesday.getFullYear()}`)
@@ -86,32 +132,61 @@ export function WeekStrip({ selected, onChange }: WeekStripProps) {
 
     el.querySelectorAll<HTMLElement>('[data-week-start]').forEach(w => observer.observe(w))
     return () => observer.disconnect()
-  }, [])
+  }, [isDesktop])
+
+  const renderDay = (day: Date) => {
+    const str = toLocalDateStr(day)
+    const isToday = str === todayStr
+    const isSelected = str === selectedStr
+
+    return (
+      <button
+        key={str}
+        className={`week-strip__day${isToday ? ' week-strip__day--today' : ''}${isSelected ? ' week-strip__day--selected' : ''}`}
+        onClick={() => onChange(day)}
+      >
+        <span className="week-strip__label">{DAYS_SHORT[day.getDay()]}</span>
+        <span className="week-strip__num">{day.getDate()}</span>
+      </button>
+    )
+  }
 
   return (
     <div className="week-strip-wrapper">
-      <span className="week-strip-month">{visibleMonth}</span>
+      <div className="week-strip-header">
+        <span className="week-strip-month">{visibleMonth}</span>
+        <div className="week-strip-arrows">
+          <button
+            className="week-strip-arrow"
+            onClick={handlePrev}
+            disabled={weekOffset <= -WEEKS_BACK}
+            aria-label="Semana anterior"
+          >
+            ‹
+          </button>
+          <button
+            className="week-strip-arrow"
+            onClick={handleNext}
+            disabled={weekOffset >= WEEKS_FORWARD}
+            aria-label="Próxima semana"
+          >
+            ›
+          </button>
+        </div>
+      </div>
+
+      {/* Desktop: grid fixo da semana atual */}
+      <div className="week-strip week-strip--desktop">
+        {desktopDays.map(renderDay)}
+      </div>
+
+      {/* Mobile: scroll horizontal entre semanas */}
       <div className="week-strip-scroll" ref={scrollRef}>
         {weeks.map((days) => {
           const weekStart = toLocalDateStr(days[0])
           return (
             <div key={weekStart} className="week-strip" data-week-start={weekStart}>
-              {days.map((day) => {
-                const str = toLocalDateStr(day)
-                const isToday = str === todayStr
-                const isSelected = str === selectedStr
-
-                return (
-                  <button
-                    key={str}
-                    className={`week-strip__day${isToday ? ' week-strip__day--today' : ''}${isSelected ? ' week-strip__day--selected' : ''}`}
-                    onClick={() => onChange(day)}
-                  >
-                    <span className="week-strip__label">{DAYS_SHORT[day.getDay()]}</span>
-                    <span className="week-strip__num">{day.getDate()}</span>
-                  </button>
-                )
-              })}
+              {days.map(renderDay)}
             </div>
           )
         })}

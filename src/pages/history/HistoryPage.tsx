@@ -129,26 +129,32 @@ export default function HistoryPage() {
           <h1 className="history-title">{t('history.title')}</h1>
         </header>
 
-        <StreakCard streak={streak} />
+        <div className="history-page__body">
+          <div className="history-page__main">
+            <CalendarMonth
+              year={year}
+              month={month}
+              dayStats={dayStats}
+              selectedDate={selectedDate}
+              onDayClick={(d) => setSelectedDate(prev => prev === d ? null : d)}
+              onPrevMonth={prevMonth}
+              onNextMonth={nextMonth}
+              isCurrentMonth={isCurrentMonth}
+            />
 
-        <CalendarMonth
-          year={year}
-          month={month}
-          dayStats={dayStats}
-          selectedDate={selectedDate}
-          onDayClick={(d) => setSelectedDate(prev => prev === d ? null : d)}
-          onPrevMonth={prevMonth}
-          onNextMonth={nextMonth}
-          isCurrentMonth={isCurrentMonth}
-        />
+            {selectedDate && (
+              <DayDetail
+                dateStr={selectedDate}
+                logs={selectedLogs}
+                habits={habits}
+              />
+            )}
+          </div>
 
-        {selectedDate && (
-          <DayDetail
-            dateStr={selectedDate}
-            logs={selectedLogs}
-            habits={habits}
-          />
-        )}
+          <aside className="history-page__aside">
+            <StreakCard streak={streak} />
+          </aside>
+        </div>
       </div>
     </div>
   )
