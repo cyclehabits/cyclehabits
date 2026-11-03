@@ -41,7 +41,8 @@
       "startDateAuto": "Calculated by time",
       "startDateRequired": "Select a start date",
       "endTimeAfterStart": "End time must be after start time",
-      "startTimeFuture": "For today, start time must be in the future"
+      "startTimeFuture": "For today, start time must be in the future",
+      "timeWarning": "For today, start time must be in the future and end time must be after start"
     },
     "edit": "Edit habit",
     "editScope": {

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@awakr/awake-ui/button'
 import { Field } from '@awakr/awake-ui/field'
 import { Switch } from '@awakr/awake-ui/switch'
+import { Alert } from '@awakr/awake-ui/alert'
 import type { Frequency, HabitCategory } from '@/types/habit'
 import './HabitForm.css'
 
@@ -127,6 +128,11 @@ export function HabitForm({
     e.preventDefault()
     if (!name.trim()) return
 
+    const now = currentTimeHHMM()
+    const effectiveDate = startDateEnabled ? startDate : ''
+    if (effectiveDate === todayLocal() && startTime && startTime < now) return
+    if (endTime && startTime && endTime <= startTime) return
+
     const computedStartDate = startDateEnabled
       ? startDate
       : calcAutoStartDate(startTime)
@@ -149,6 +155,12 @@ export function HabitForm({
       category,
     })
   }
+
+  const effectiveStartDate = startDateEnabled ? startDate : ''
+  const isStartToday = effectiveStartDate === todayLocal()
+  const startTimeWarning = isStartToday && !!startTime && startTime < currentTimeHHMM()
+  const endTimeWarning = !!endTime && !!startTime && endTime <= startTime
+  const hasTimeWarning = startTimeWarning || endTimeWarning
 
   const FREQ_LABELS: Record<FreqType, string> = {
     once:    t('habits.form.once'),
@@ -298,14 +310,7 @@ export function HabitForm({
             type="time"
             value={startTime}
             required
-            min={startDateEnabled && startDate === todayLocal() ? currentTimeHHMM() : undefined}
-            onChange={e => {
-              const val = e.target.value
-              const minTime = startDateEnabled && startDate === todayLocal()
-                ? currentTimeHHMM()
-                : undefined
-              setStartTime(minTime && val < minTime ? minTime : val)
-            }}
+            onChange={e => setStartTime(e.target.value)}
           />
         </div>
         <div className="habit-form__field habit-form__field--half">
@@ -314,14 +319,20 @@ export function HabitForm({
             type="time"
             value={endTime}
             required
-            min={startTime || undefined}
-            onChange={e => {
-              const val = e.target.value
-              setEndTime(startTime && val <= startTime ? startTime : val)
-            }}
+            onChange={e => setEndTime(e.target.value)}
           />
         </div>
       </div>
+
+      {hasTimeWarning && (
+        <Alert variant="warning">
+          {startTimeWarning && endTimeWarning
+            ? t('habits.form.timeWarning')
+            : startTimeWarning
+              ? t('habits.form.startTimeFuture')
+              : t('habits.form.endTimeAfterStart')}
+        </Alert>
+      )}
 
       {freqType !== 'once' && (
         <div className="habit-form__field">

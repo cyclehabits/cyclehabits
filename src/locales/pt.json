@@ -41,7 +41,8 @@
       "startDateAuto": "Calculado pelo horário",
       "startDateRequired": "Selecione uma data de início",
       "endTimeAfterStart": "Horário de fim deve ser após o início",
-      "startTimeFuture": "Para hoje, o início deve ser no futuro"
+      "startTimeFuture": "Para hoje, o início deve ser no futuro",
+      "timeWarning": "Para hoje, o início deve ser no futuro e o fim deve ser após o início"
     },
     "edit": "Editar hábito",
     "editScope": {
