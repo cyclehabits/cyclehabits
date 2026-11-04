@@ -8,6 +8,12 @@ const ONESIGNAL_REST_API_KEY = defineSecret('ONESIGNAL_REST_API_KEY')
 const DAYS_AHEAD = 7
 const TIMEZONE = 'America/Sao_Paulo'
 
+interface HabitFrequency {
+  type: 'daily' | 'weekly' | 'monthly' | 'every' | 'once'
+  days?: number | number[]
+  day?: number
+}
+
 interface HabitData {
   userId: string
   name: string
@@ -15,16 +21,56 @@ interface HabitData {
   notificationTime?: string
   startDate?: string
   expiresAt?: string
+  frequency?: HabitFrequency
   notificationSchedule?: Record<string, string>
 }
 
-function getNextDates(daysAhead: number): Date[] {
+function isScheduledForDate(habit: HabitData, dateKey: string): boolean {
+  const freq = habit.frequency
+  if (!freq || freq.type === 'daily') return true
+  if (freq.type === 'once') return true
+
+  const date = new Date(dateKey + 'T00:00:00Z')
+
+  if (freq.type === 'weekly') {
+    return Array.isArray(freq.days) && freq.days.includes(date.getUTCDay())
+  }
+  if (freq.type === 'monthly') {
+    return freq.day === date.getUTCDate()
+  }
+  if (freq.type === 'every') {
+    const origin = new Date((habit.startDate ?? dateKey) + 'T00:00:00Z')
+    const diff = Math.round((date.getTime() - origin.getTime()) / 86_400_000)
+    return typeof freq.days === 'number' && diff % freq.days === 0
+  }
+  return false
+}
+
+function getDatesToSchedule(habit: HabitData): Date[] {
+  const today = new Date()
+  const todayKey = today.toISOString().slice(0, 10)
+  const startKey = habit.startDate && habit.startDate > todayKey ? habit.startDate : todayKey
+
+  // Use expiresAt as upper bound when shorter than DAYS_AHEAD, otherwise cap at DAYS_AHEAD
+  let endKey: string
+  if (habit.expiresAt) {
+    const maxKey = new Date(today.getTime() + DAYS_AHEAD * 86_400_000)
+      .toISOString()
+      .slice(0, 10)
+    endKey = habit.expiresAt < maxKey ? habit.expiresAt : maxKey
+  } else {
+    endKey = new Date(today.getTime() + DAYS_AHEAD * 86_400_000)
+      .toISOString()
+      .slice(0, 10)
+  }
+
   const dates: Date[] = []
-  const now = new Date()
-  for (let i = 0; i < daysAhead; i++) {
-    const d = new Date(now)
-    d.setDate(d.getDate() + i)
-    dates.push(d)
+  const cursor = new Date(startKey + 'T00:00:00Z')
+  const end = new Date(endKey + 'T00:00:00Z')
+
+  while (cursor <= end) {
+    dates.push(new Date(cursor))
+    cursor.setUTCDate(cursor.getUTCDate() + 1)
   }
   return dates
 }
@@ -33,7 +79,7 @@ function buildSendAt(date: Date, timeHHMM: string): Date {
   const [hours, minutes] = timeHHMM.split(':').map(Number)
   // Treat notificationTime as America/Sao_Paulo (UTC-3)
   const utcMs =
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), hours + 3, minutes)
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), hours + 3, minutes)
   return new Date(utcMs)
 }
 
@@ -62,11 +108,10 @@ async function scheduleForHabit(
 
   const newSchedule: Record<string, string> = {}
 
-  for (const date of getNextDates(DAYS_AHEAD)) {
+  for (const date of getDatesToSchedule(habit)) {
     const key = toDateKey(date)
 
-    if (habit.startDate && key < habit.startDate) continue
-    if (habit.expiresAt && key > habit.expiresAt) continue
+    if (!isScheduledForDate(habit, key)) continue
 
     const sendAt = buildSendAt(date, habit.notificationTime)
 
