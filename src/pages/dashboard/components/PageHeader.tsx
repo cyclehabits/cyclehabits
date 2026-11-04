@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/auth/useAuth'
 import { useProfile } from '@/hooks/useProfile'
+import { Avatar } from '@awakr/awake-ui/avatar'
 import './PageHeader.css'
 
 interface PageHeaderProps {
@@ -33,18 +34,13 @@ export function PageHeader({ date }: PageHeaderProps) {
           <p className="page-header__greeting">{t('dashboard.greeting', { name: firstName })}</p>
           <h1 className="page-header__title">{label}</h1>
         </div>
-        <button className="page-header__avatar" type="button" aria-label="Perfil">
-          {photoURL ? (
-            <img
-              src={photoURL}
-              alt={firstName}
-              className="page-header__avatar-img"
-              referrerPolicy="no-referrer"
-            />
-          ) : (
-            <span className="page-header__avatar-fallback">{initial}</span>
-          )}
-        </button>
+        <Avatar
+          src={photoURL || undefined}
+          alt={firstName}
+          fallback={initial}
+          size="md"
+          className="page-header__avatar"
+        />
       </div>
     </header>
   )

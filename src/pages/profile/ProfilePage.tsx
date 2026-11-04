@@ -6,6 +6,7 @@ import { useInstallPrompt } from '@/hooks/useInstallPrompt'
 import { useAuth } from '@/contexts/auth/useAuth'
 import { useProfile } from '@/hooks/useProfile'
 import { Button } from '@awakr/awake-ui/button'
+import { Field } from '@awakr/awake-ui/field'
 import './ProfilePage.css'
 
 const LANGUAGES = [
@@ -63,19 +64,21 @@ export default function ProfilePage() {
         <section className="profile-section">
           <h2 className="profile-section__label">{t('profile.displayName')}</h2>
           <div className="profile-name-edit">
-            <input
+            <Field.Control
               className="profile-name-input"
               value={nameInput}
               onChange={e => { setNameInput(e.target.value); setSaved(false) }}
               onKeyDown={e => e.key === 'Enter' && handleSaveName()}
             />
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               className="profile-save-btn"
               onClick={handleSaveName}
               disabled={saving || !nameInput.trim() || nameInput === profile?.displayName}
             >
               {saving ? '…' : saved ? t('profile.saved') : t('profile.save')}
-            </button>
+            </Button>
           </div>
         </section>
 

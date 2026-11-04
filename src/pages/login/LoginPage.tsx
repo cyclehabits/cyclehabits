@@ -162,9 +162,9 @@ export default function LoginPage() {
               <Field.Root>
                 <div className="flex justify-between items-center mb-1">
                   <Field.Label>{t('login.password')}</Field.Label>
-                  <button type="button" className="login-link" onClick={handleForgotPassword}>
+                  <Button type="button" variant="ghost" size="sm" className="login-link" onClick={handleForgotPassword}>
                     {t('login.forgot')}
-                  </button>
+                  </Button>
                 </div>
                 <Field.Control
                   type="password"
@@ -252,14 +252,14 @@ export default function LoginPage() {
 
       {canInstall && (
         hasPrompt ? (
-          <button className="login-install-btn" onClick={install}>
+          <Button variant="ghost" size="sm" className="login-install-btn" onClick={install}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
               <polyline points="7 10 12 15 17 10"/>
               <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
             {t('settings.install')}
-          </button>
+          </Button>
         ) : (
           <p className="login-install-hint">{t('settings.install_hint')}</p>
         )

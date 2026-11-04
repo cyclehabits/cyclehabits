@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Button } from '@awakr/awake-ui/button'
 import type { Habit, HabitLog, HabitStatus, HabitOverride, HabitCategory } from '@/types/habit'
 import { isRecurring } from '@/utils/habit'
 import { EditScopeModal } from './EditScopeModal'
@@ -217,17 +218,17 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
                   ? t('habits.doneAt', { time: completedAt })
                   : t('habits.doneFeedback')}
               </span>
-              <button onClick={() => onUpdate(habit.id, 'pending')}>
+              <Button variant="ghost" size="sm" onClick={() => onUpdate(habit.id, 'pending')}>
                 {t('habits.undone')}
-              </button>
+              </Button>
             </div>
           )}
           {status === 'ignored' && (
             <div className="habit-card__footer habit-card__footer--ignored">
               <span>{t('habits.ignoredFeedback')}</span>
-              <button onClick={() => onUpdate(habit.id, 'pending')}>
+              <Button variant="ghost" size="sm" onClick={() => onUpdate(habit.id, 'pending')}>
                 {t('habits.revert')}
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -235,12 +236,12 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
         {/* Ações expandidas abaixo do card */}
         {expanded && (
           <div className="habit-card__actions">
-            <button className="habit-card__actions-btn" onClick={handleEditClick}>
+            <Button variant="ghost" className="habit-card__actions-btn" onClick={handleEditClick}>
               ✏️ {t('habits.edit')}
-            </button>
-            <button className="habit-card__actions-btn habit-card__actions-btn--delete" onClick={handleDeleteClick}>
+            </Button>
+            <Button variant="destructive" className="habit-card__actions-btn" onClick={handleDeleteClick}>
               🗑️ {t('habits.delete')}
-            </button>
+            </Button>
           </div>
         )}
       </li>
@@ -249,21 +250,19 @@ export function HabitItem({ habit, log, override, date, onUpdate }: HabitItemPro
         <div className="habit-card__overlay" onClick={() => setExpanded(false)} />
       )}
 
-      {showEditModal && (
-        <EditScopeModal
-          onThisDay={() => { setShowEditModal(false); navigate(`/habits?edit=${habit.id}&date=${date}`) }}
-          onAllEvents={() => { setShowEditModal(false); navigate(`/habits?edit=${habit.id}`) }}
-          onClose={() => setShowEditModal(false)}
-        />
-      )}
+      <EditScopeModal
+        open={showEditModal}
+        onThisDay={() => { setShowEditModal(false); navigate(`/habits?edit=${habit.id}&date=${date}`) }}
+        onAllEvents={() => { setShowEditModal(false); navigate(`/habits?edit=${habit.id}`) }}
+        onClose={() => setShowEditModal(false)}
+      />
 
-      {showDeleteModal && (
-        <DeleteScopeModal
-          onThisDay={() => { setShowDeleteModal(false); deleteHabitDay.mutate({ habitId: habit.id, date }) }}
-          onAllEvents={() => { setShowDeleteModal(false); deleteHabit.mutate(habit.id) }}
-          onClose={() => setShowDeleteModal(false)}
-        />
-      )}
+      <DeleteScopeModal
+        open={showDeleteModal}
+        onThisDay={() => { setShowDeleteModal(false); deleteHabitDay.mutate({ habitId: habit.id, date }) }}
+        onAllEvents={() => { setShowDeleteModal(false); deleteHabit.mutate(habit.id) }}
+        onClose={() => setShowDeleteModal(false)}
+      />
     </>
   )
 }

@@ -1,3 +1,4 @@
+import { Button } from '@awakr/awake-ui/button'
 import './CalendarMonth.css'
 
 interface DayStat {
@@ -43,9 +44,9 @@ export function CalendarMonth({
   return (
     <div className="calendar-card">
       <div className="calendar-nav">
-        <button className="calendar-nav__btn" onClick={onPrevMonth}>‹</button>
+        <Button variant="ghost" size="sm" className="calendar-nav__btn" onClick={onPrevMonth}>‹</Button>
         <span className="calendar-nav__label">{MONTH_NAMES[month]} {year}</span>
-        <button className="calendar-nav__btn" onClick={onNextMonth} disabled={isCurrentMonth}>›</button>
+        <Button variant="ghost" size="sm" className="calendar-nav__btn" onClick={onNextMonth} disabled={isCurrentMonth}>›</Button>
       </div>
 
       <div className="calendar-grid">

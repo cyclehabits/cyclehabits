@@ -1,4 +1,5 @@
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react'
+import { Button } from '@awakr/awake-ui/button'
 import './WeekStrip.css'
 
 interface WeekStripProps {
@@ -156,22 +157,24 @@ export function WeekStrip({ selected, onChange }: WeekStripProps) {
       <div className="week-strip-header">
         <span className="week-strip-month">{visibleMonth}</span>
         <div className="week-strip-arrows">
-          <button
+          <Button
+            variant="ghost"
             className="week-strip-arrow"
             onClick={handlePrev}
             disabled={weekOffset <= -WEEKS_BACK}
             aria-label="Semana anterior"
           >
             ‹
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
             className="week-strip-arrow"
             onClick={handleNext}
             disabled={weekOffset >= WEEKS_FORWARD}
             aria-label="Próxima semana"
           >
             ›
-          </button>
+          </Button>
         </div>
       </div>
 
