@@ -61,7 +61,6 @@ async function scheduleForHabit(
   await cancelAllScheduled(apiKey, existingSchedule)
 
   const newSchedule: Record<string, string> = {}
-  const now = new Date()
 
   for (const date of getNextDates(DAYS_AHEAD)) {
     const key = toDateKey(date)
@@ -70,7 +69,6 @@ async function scheduleForHabit(
     if (habit.expiresAt && key > habit.expiresAt) continue
 
     const sendAt = buildSendAt(date, habit.notificationTime)
-    if (sendAt <= now) continue
 
     const notificationId = await scheduleNotification(
       apiKey,
