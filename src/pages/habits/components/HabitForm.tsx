@@ -109,6 +109,7 @@ export function HabitForm({
   const [startDateEnabled, setStartDateEnabled] = useState(!!initialValues?.startDate)
   const [startDate, setStartDate] = useState(initialValues?.startDate ?? '')
   const [hasDuration, setHasDuration] = useState(!!initialValues?.expiresAt)
+  const [expiresAtDirect, setExpiresAtDirect] = useState(initialValues?.expiresAt ?? '')
   const [durationValue, setDurationValue] = useState<number | ''>(1)
   const [durationUnit, setDurationUnit] = useState<DurationUnit>('month')
   const [notificationEnabled, setNotificationEnabled] = useState(initialValues?.notification ?? false)
@@ -144,8 +145,13 @@ const [notificationTime, setNotificationTime] = useState(initialValues?.notifica
     let expiresAt: string | undefined
     if (freqType === 'once') {
       expiresAt = computedStartDate
-    } else if (hasDuration && durationValue !== '' && durationValue > 0) {
-      expiresAt = calcExpiresAt(durationValue, durationUnit)
+    } else if (hasDuration) {
+      // Ao editar: usa a data direta; ao criar: calcula a partir de durationValue/Unit
+      if (expiresAtDirect && initialValues?.expiresAt) {
+        expiresAt = expiresAtDirect
+      } else if (durationValue !== '' && durationValue > 0) {
+        expiresAt = calcExpiresAt(durationValue, durationUnit)
+      }
     }
 
     onSubmit({
@@ -374,32 +380,44 @@ const [notificationTime, setNotificationTime] = useState(initialValues?.notifica
               <Switch.Thumb />
             </Switch.Root>
           </div>
-          <div className="habit-form__duration-row">
+          {initialValues?.expiresAt ? (
+            // Modo edição: data final direta
             <Field.Control
-              type="number"
-              min={1}
-              max={999}
-              value={durationValue}
+              type="date"
+              value={expiresAtDirect}
               disabled={!hasDuration}
-              onChange={e =>
-                setDurationValue(e.target.value === '' ? '' : Math.max(1, Number(e.target.value)))
-              }
-              className="habit-form__duration-value"
+              onChange={e => setExpiresAtDirect(e.target.value)}
             />
-          </div>
-          <div className="habit-form__duration-units">
-            {(['day', 'month', 'year'] as DurationUnit[]).map(unit => (
-              <button
-                key={unit}
-                type="button"
-                disabled={!hasDuration}
-                className={`habit-form__freq-tab${durationUnit === unit ? ' habit-form__freq-tab--active' : ''}`}
-                onClick={() => setDurationUnit(unit)}
-              >
-                {t(`habits.form.duration${unit.charAt(0).toUpperCase() + unit.slice(1)}`)}
-              </button>
-            ))}
-          </div>
+          ) : (
+            <>
+              <div className="habit-form__duration-row">
+                <Field.Control
+                  type="number"
+                  min={1}
+                  max={999}
+                  value={durationValue}
+                  disabled={!hasDuration}
+                  onChange={e =>
+                    setDurationValue(e.target.value === '' ? '' : Math.max(1, Number(e.target.value)))
+                  }
+                  className="habit-form__duration-value"
+                />
+              </div>
+              <div className="habit-form__duration-units">
+                {(['day', 'month', 'year'] as DurationUnit[]).map(unit => (
+                  <button
+                    key={unit}
+                    type="button"
+                    disabled={!hasDuration}
+                    className={`habit-form__freq-tab${durationUnit === unit ? ' habit-form__freq-tab--active' : ''}`}
+                    onClick={() => setDurationUnit(unit)}
+                  >
+                    {t(`habits.form.duration${unit.charAt(0).toUpperCase() + unit.slice(1)}`)}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       )}
 

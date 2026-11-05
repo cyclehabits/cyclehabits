@@ -36,6 +36,11 @@ export default function HabitsPage() {
         frequency: habitToEdit.frequency,
         startTime: existingOverride?.startTime ?? habitToEdit.startTime,
         endTime: existingOverride?.endTime ?? habitToEdit.endTime,
+        startDate: habitToEdit.startDate,
+        expiresAt: habitToEdit.expiresAt,
+        category: habitToEdit.category,
+        notification: habitToEdit.notification ?? false,
+        notificationTime: habitToEdit.notificationTime,
       }
     : undefined
 

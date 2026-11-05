@@ -5,12 +5,9 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
-// Captura o evento antes do React montar (ele dispara cedo demais para o useEffect)
-let _deferredPrompt: BeforeInstallPromptEvent | null = null
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault()
-  _deferredPrompt = e as BeforeInstallPromptEvent
-})
+// Lê o evento capturado pelo listener inline do index.html (roda antes do bundle)
+let _deferredPrompt: BeforeInstallPromptEvent | null =
+  (window as any).__installPromptEvent ?? null
 
 export function useInstallPrompt() {
   const [prompt, setPrompt] = useState<BeforeInstallPromptEvent | null>(_deferredPrompt)
@@ -21,6 +18,7 @@ export function useInstallPrompt() {
       e.preventDefault()
       const evt = e as BeforeInstallPromptEvent
       _deferredPrompt = evt
+      ;(window as any).__installPromptEvent = evt
       setPrompt(evt)
     }
 
